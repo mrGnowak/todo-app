@@ -11,5 +11,18 @@ services:
         max-file: "3"
     ports:
       - '5444:5432'
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=postgres@postgres.com
+      - PGADMIN_DEFAULT_PASSWORD=password123
+      - PGADMIN_LISTEN_PORT=9098
+    ports:
+      - '9098:9098'
+    depends_on:
+      - postgres
+    links:
+      - postgres
 volumes:
   postgres-data:
