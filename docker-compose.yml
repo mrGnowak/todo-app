@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:latest
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password123
@@ -13,7 +13,7 @@ services:
       - '5444:5432'
   pgadmin:
     image: dpage/pgadmin4
-    restart: always
+    restart: unless-stopped
     environment:
       - PGADMIN_DEFAULT_EMAIL=postgres@postgres.com
       - PGADMIN_DEFAULT_PASSWORD=password123
@@ -24,5 +24,20 @@ services:
       - postgres
     links:
       - postgres
+
+  api:
+    build: ./
+    restart: unless-stopped
+    environment:
+      - POSTGRES_URL=postgres:5432
+    ports:
+        - 8080:8080
+  front:
+    build: ./src/main/frontend
+    restart: unless-stopped
+    ports:
+        - 8081:80
+    links:
+      - api
 volumes:
   postgres-data:
