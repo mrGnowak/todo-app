@@ -2,8 +2,11 @@ package com.proj.todoapp.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,20 +22,28 @@ import io.micrometer.common.lang.NonNull;
 @RequestMapping(value = "/api")
 public class TodoController {
 
+    Logger logger = LoggerFactory.getLogger(TodoController.class);
+
     @Autowired
     private TodoRepo todoRepo;
 
-    @GetMapping
+    @GetMapping(value = "/get")
     public List<TodoItem> findAll() {
         return todoRepo.findAll();
     }
 
-    @PostMapping
+    @GetMapping(value = "/test")
+    public void findAll1() {
+        logger.info("test");
+
+    }
+
+    @PostMapping(value = "/save", consumes = { "*/*" })
     public TodoItem save(@NonNull @RequestBody TodoItem todoItem) {
         return todoRepo.save(todoItem);
     }
 
-    @PutMapping
+    @PutMapping(value = "/put")
     public TodoItem update(@NonNull @RequestBody TodoItem todoItem) {
         return todoRepo.save(todoItem);
     }

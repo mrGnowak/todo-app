@@ -22,7 +22,7 @@ public class TodoItem {
 
     public void setTitle(String title) {
         this.title = title;
-    }    
+    }
 
     public boolean isDone() {
         return isDone;
