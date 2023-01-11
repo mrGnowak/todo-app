@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import './App.css'
 
@@ -10,8 +10,21 @@ type Todo = {
 
 function App() {
 
-  const [todos, setTodos] = React.useState<Todo[] | undefined>()
-  React.useEffect(() => {
+  const [todoItem, setTodoItem] = useState<string | undefined>();
+  const onChange = (e: React.FormEvent<HTMLInputElement>) => setTodoItem(e.currentTarget.value);
+
+  const save = () => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: todoItem })
+    };
+    fetch('api/save', requestOptions)
+      .then(response => response.json())
+  };
+
+  const [todos, setTodos] = useState<Todo[] | undefined>()
+  useEffect(() => {
     //  const getOption = {
     //    method: 'GET',
     //    headers: { 'Content-Type': 'application/json' },
@@ -21,15 +34,17 @@ function App() {
       .then((data) => {
         setTodos(data as Todo[])
       });
-  }, []
+  }, [todoItem]
   )
-  const [todoItem, setTodoItem] = React.useState<string | undefined>();
-  const onChange = (e: React.FormEvent<HTMLInputElement>) => setTodoItem(e.currentTarget.value);
 
-  const test = () => fetch('api/test')
-    .then((data) => {
-      console.log(data)
-    });
+  const remove = () => {
+    fetch('api/remove/' + todoItem, { method: 'DELETE' })
+      .then(response => response.json())
+  };
+  //const save = () => fetch('api/save')
+  //  .then((data) => {
+  //    console.log(data)
+  //  });
 
   //React.useEffect(() => {
   //  const requestOptions = {
@@ -49,16 +64,12 @@ function App() {
           Add new task:
           <input type="text" name="name" onChange={onChange} />
         </label>
-        <button value="Save" onClick={test}>Save</button>
+        <button value="Save" onClick={save}>Save</button>
+        <button value="Remove" onClick={remove}>Delete</button>
       </div>
-      {todoItem}
       <div>
-        <select>
-          {todos?.map((todos) => <option>{todos.title}</option>)}
-        </select>
+        {todos?.map((todos) => <li>{todos.id} - {todos.title} </li>)}
       </div>
-
-
     </div>
   )
 }
