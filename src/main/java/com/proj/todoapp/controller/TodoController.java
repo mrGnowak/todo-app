@@ -44,8 +44,9 @@ public class TodoController {
     }
 
     @DeleteMapping(value = "/remove/{id}")
-    public void remove(@PathVariable Long id) {
+    public Integer remove(@PathVariable Long id) {
         todoRepo.deleteById(id);
+        return null;
     }
 
     // @DeleteMapping(value = "/remove/{title}")

@@ -13,6 +13,19 @@ function App() {
   const [todoItem, setTodoItem] = useState<string | undefined>();
   const onChange = (e: React.FormEvent<HTMLInputElement>) => setTodoItem(e.currentTarget.value);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const update = () => {
+    if (isLoading)
+      return;
+    setIsLoading(true)
+    fetch('api/get')
+      .then((response) => response.json())
+      .then((data) => {
+        setTodos(data as Todo[])
+      })
+      .finally(() => setIsLoading(false))
+  }
+
   const save = () => {
     const requestOptions = {
       method: 'POST',
@@ -21,26 +34,21 @@ function App() {
     };
     fetch('api/save', requestOptions)
       .then(response => response.json())
+      .then(() => update())
   };
-
-  const [todos, setTodos] = useState<Todo[] | undefined>()
-  useEffect(() => {
-    //  const getOption = {
-    //    method: 'GET',
-    //    headers: { 'Content-Type': 'application/json' },
-    //  };
-    fetch('api/get')//, getOption)
-      .then((response) => response.json())
-      .then((data) => {
-        setTodos(data as Todo[])
-      });
-  }, [todoItem]
-  )
 
   const remove = () => {
     fetch('api/remove/' + todoItem, { method: 'DELETE' })
       .then(response => response.json())
+      .then(() => update())
   };
+
+  const [todos, setTodos] = useState<Todo[] | undefined>()
+
+  useEffect(() => {
+    update();
+  }, []
+  )
   //const save = () => fetch('api/save')
   //  .then((data) => {
   //    console.log(data)
