@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import './App.css'
+import { Button, Space } from 'antd';
 
 type Todo = {
   id: number
@@ -39,7 +40,6 @@ function App() {
 
   const remove = () => {
     fetch('api/remove/' + todoItem, { method: 'DELETE' })
-      .then(response => response.json())
       .then(() => update())
   };
 
@@ -72,8 +72,10 @@ function App() {
           Add new task:
           <input type="text" name="name" onChange={onChange} />
         </label>
-        <button value="Save" onClick={save}>Save</button>
-        <button value="Remove" onClick={remove}>Delete</button>
+        <Space wrap>
+          <Button type="primary" value="Save" onClick={save}>Save</Button>
+          <Button type="primary" value="Remove" onClick={remove}>Delete</Button>
+        </Space>
       </div>
       <div>
         {todos?.map((todos) => <li>{todos.id} - {todos.title} </li>)}
