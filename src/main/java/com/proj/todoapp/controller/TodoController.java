@@ -18,6 +18,7 @@ import com.proj.todoapp.model.TodoItem;
 import com.proj.todoapp.repository.TodoRepo;
 
 import io.micrometer.common.lang.NonNull;
+import jakarta.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -34,7 +35,7 @@ public class TodoController {
     }
 
     @PostMapping(value = "/save", consumes = { "*/*" })
-    public TodoItem save(@NonNull @RequestBody TodoItem todoItem) {
+    public TodoItem save(@NonNull @NotBlank @RequestBody TodoItem todoItem) {
         return todoRepo.save(todoItem);
     }
 

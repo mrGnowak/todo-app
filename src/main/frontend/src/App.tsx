@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import './App.css'
-import { Button, Space } from 'antd';
+import { Button, Modal, Popconfirm } from 'antd';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 type Todo = {
   id: number
@@ -38,8 +39,8 @@ function App() {
       .then(() => update())
   };
 
-  const remove = () => {
-    fetch('api/remove/' + todoItem, { method: 'DELETE' })
+  const remove = (val: number) => {
+    fetch('api/remove/' + val, { method: 'DELETE' })
       .then(() => update())
   };
 
@@ -49,6 +50,24 @@ function App() {
     update();
   }, []
   )
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+    save();
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const text = 'Are you sure to delete this task?';
+  const description = 'Delete the task';
   //const save = () => fetch('api/save')
   //  .then((data) => {
   //    console.log(data)
@@ -68,20 +87,28 @@ function App() {
   return (
     <div className="App">
       <div>
-        <label>
-          Add new task:
+      <Button type="primary" onClick={showModal}>
+      <PlusOutlined />
+      </Button>
+      <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
           <input type="text" name="name" onChange={onChange} />
-        </label>
-        <Space wrap>
-          <Button type="primary" value="Save" onClick={save}>Save</Button>
-          <Button type="primary" value="Remove" onClick={remove}>Delete</Button>
-        </Space>
+      </Modal>
       </div>
       <div>
-        {todos?.map((todos) => <li>{todos.id} - {todos.title} </li>)}
+        {todos?.map((todos) => 
+        <li>{todos.id} - {todos.title} 
+        <Button type="primary" value={todos.id} onClick={() => remove(todos.id)}>
+          <DeleteOutlined />
+          </Button>
+        </li> 
+        )}
       </div>
     </div>
   )
 }
 
 export default App
+//<Space wrap>
+//          <Button type="primary" value="Save" onClick={save}>Save</Button>
+//          <Button type="primary" value="Remove" onClick={remove}>Delete</Button>
+//        </Space>
