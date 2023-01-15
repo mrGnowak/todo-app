@@ -68,6 +68,45 @@ function App() {
 
   const text = 'Are you sure to delete this task?';
   const description = 'Delete the task';
+
+  return (
+    <div className="App">
+      <div>
+      <Button type="primary" onClick={showModal}>
+      <PlusOutlined />
+      </Button>
+      <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <input type="text" name="name" onChange={onChange} />
+      </Modal>
+      </div>
+      <div>
+        {todos?.map((todos) => 
+          <li>{todos.id} - {todos.title}
+            <Popconfirm
+              placement="bottomLeft"
+              title={text}
+              description={description}
+              onConfirm={() => remove(todos.id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">
+                <DeleteOutlined />
+              </Button>
+            </Popconfirm> 
+          </li> 
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default App
+//<Space wrap>
+//          <Button type="primary" value="Save" onClick={save}>Save</Button>
+//          <Button type="primary" value="Remove" onClick={remove}>Delete</Button>
+//        </Space>
+
   //const save = () => fetch('api/save')
   //  .then((data) => {
   //    console.log(data)
@@ -83,32 +122,3 @@ function App() {
   //    .then(response => response.json())
   //    //.then(data => setPostId(data.id));
   //}, []);
-
-  return (
-    <div className="App">
-      <div>
-      <Button type="primary" onClick={showModal}>
-      <PlusOutlined />
-      </Button>
-      <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-          <input type="text" name="name" onChange={onChange} />
-      </Modal>
-      </div>
-      <div>
-        {todos?.map((todos) => 
-        <li>{todos.id} - {todos.title} 
-        <Button type="primary" value={todos.id} onClick={() => remove(todos.id)}>
-          <DeleteOutlined />
-          </Button>
-        </li> 
-        )}
-      </div>
-    </div>
-  )
-}
-
-export default App
-//<Space wrap>
-//          <Button type="primary" value="Save" onClick={save}>Save</Button>
-//          <Button type="primary" value="Remove" onClick={remove}>Delete</Button>
-//        </Space>
