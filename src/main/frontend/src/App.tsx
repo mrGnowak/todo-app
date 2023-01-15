@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import './App.css'
-import { Button, Modal, Popconfirm } from 'antd';
+import { Button, Modal, Popconfirm, Col, Row, Typography } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 type Todo = {
@@ -11,6 +11,8 @@ type Todo = {
 }
 
 function App() {
+
+  const { Title } = Typography;
 
   const [todoItem, setTodoItem] = useState<string | undefined>();
   const onChange = (e: React.FormEvent<HTMLInputElement>) => setTodoItem(e.currentTarget.value);
@@ -70,33 +72,49 @@ function App() {
   const description = 'Delete the task';
 
   return (
-    <div className="App">
-      <div>
-      <Button type="primary" onClick={showModal}>
-      <PlusOutlined />
-      </Button>
-      <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-          <input type="text" name="name" onChange={onChange} />
-      </Modal>
-      </div>
-      <div>
-        {todos?.map((todos) => 
-          <li>{todos.id} - {todos.title}
-            <Popconfirm
-              placement="bottomLeft"
-              title={text}
-              description={description}
-              onConfirm={() => remove(todos.id)}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="primary">
-                <DeleteOutlined />
+    <div>
+      <Title>ToDoApp</Title>
+      <Row>
+        <Col span={8}>
+
+          <div>
+            <Title level={3}>
+              ToDo items
+              <Button type="primary" onClick={showModal}>
+                <PlusOutlined />
               </Button>
-            </Popconfirm> 
-          </li> 
-        )}
-      </div>
+            </Title>
+            <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+              <input type="text" name="name" onChange={onChange} />
+            </Modal>
+          </div>
+
+          <div>
+            {todos?.map((todos) =>
+              <li>{todos.id} - {todos.title}
+                <Popconfirm
+                  placement="bottomLeft"
+                  title={text}
+                  description={description}
+                  onConfirm={() => remove(todos.id)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button type="primary">
+                    <DeleteOutlined />
+                  </Button>
+                </Popconfirm>
+              </li>
+            )}
+          </div>
+        </Col>
+        <Col span={8}>
+          <Title level={3}>In progress</Title>
+        </Col>
+        <Col span={8}>
+          <Title level={3}>Done</Title>
+        </Col>
+      </Row>
     </div>
   )
 }
