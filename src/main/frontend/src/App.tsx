@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import './App.css'
 import { Button, Modal, Popconfirm, Col, Row, Typography } from 'antd';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 type Todo = {
   id: number
@@ -76,35 +76,52 @@ function App() {
       <Title>ToDoApp</Title>
       <Row>
         <Col span={8}>
-
           <div>
-            <Title level={3}>
-              ToDo items
-              <Button type="primary" onClick={showModal}>
-                <PlusOutlined />
-              </Button>
-            </Title>
+            <Row wrap={false}>
+              <Col flex="auto">
+                <Title level={3}>
+                  ToDo items
+                </Title>
+              </Col>
+              <Col flex="50px">
+                <h3>
+                  <Button type="primary" onClick={showModal}>
+                    <PlusOutlined />
+                  </Button>
+                </h3>
+              </Col>
+            </Row>
             <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
               <input type="text" name="name" onChange={onChange} />
             </Modal>
           </div>
-
           <div>
             {todos?.map((todos) =>
-              <li>{todos.id} - {todos.title}
-                <Popconfirm
-                  placement="bottomLeft"
-                  title={text}
-                  description={description}
-                  onConfirm={() => remove(todos.id)}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button type="primary">
-                    <DeleteOutlined />
-                  </Button>
-                </Popconfirm>
-              </li>
+              <div>
+                <Row wrap={false}>
+                  <Col flex="auto">
+                    {todos.title}
+                  </Col>
+                  <Col flex="50px">
+                    {todos.done === true ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                  </Col>
+                  <Col flex="50px">
+                    <Popconfirm
+                      placement="bottomLeft"
+                      title={text}
+                      description={description}
+                      onConfirm={() => remove(todos.id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="primary">
+                        <DeleteOutlined />
+                      </Button>
+                    </Popconfirm>
+                  </Col>
+
+                </Row>
+              </div>
             )}
           </div>
         </Col>
