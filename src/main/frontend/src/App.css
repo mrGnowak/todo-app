@@ -5,22 +5,11 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -38,4 +27,29 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.space-align-block {
+  flex: none;
+  margin: 8px 4px;
+  padding: 4px;
+  border: 1px solid #40a9ff;
+}
+
+.rcorners1 {
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+
+}
+
+.rcorners2 {
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+
+  min-height: 500px;
+  margin: 10px;
+}
+
+.padding {
+  padding: 10x;
 }

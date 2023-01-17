@@ -74,62 +74,81 @@ function App() {
   return (
     <div>
       <Title>ToDoApp</Title>
-      <Row>
-        <Col span={8}>
-          <div>
-            <Row wrap={false}>
-              <Col flex="auto">
-                <Title level={3}>
-                  ToDo items
-                </Title>
-              </Col>
-              <Col flex="50px">
-                <h3>
-                  <Button type="primary" onClick={showModal}>
-                    <PlusOutlined />
-                  </Button>
-                </h3>
-              </Col>
-            </Row>
-            <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-              <input type="text" name="name" onChange={onChange} />
-            </Modal>
-          </div>
-          <div>
-            {todos?.map((todos) =>
-              <div>
-                <Row wrap={false}>
-                  <Col flex="auto">
-                    {todos.title}
-                  </Col>
-                  <Col flex="50px">
-                    {todos.done === true ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-                  </Col>
-                  <Col flex="50px">
-                    <Popconfirm
-                      placement="bottomLeft"
-                      title={text}
-                      description={description}
-                      onConfirm={() => remove(todos.id)}
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <Button type="primary">
-                        <DeleteOutlined />
-                      </Button>
-                    </Popconfirm>
-                  </Col>
 
-                </Row>
-              </div>
-            )}
+      <Row >
+        <Col span={8}>
+          <div className="rcorners2">
+            <div className="rcorners1" style={{ padding: '10px' }}>
+              <Row wrap={false}>
+                <Col flex="auto" >
+                  <Title level={3}>
+                    ToDo items
+                  </Title>
+                </Col>
+                <Col flex="50px">
+                  <h3>
+                    <Button type="primary" onClick={showModal}>
+                      <PlusOutlined />
+                    </Button>
+                  </h3>
+                </Col>
+              </Row>
+              <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <input type="text" name="name" onChange={onChange} />
+              </Modal>
+            </div>
+            <div style={{ padding: '10px' }}>
+              {todos?.map((todos) =>
+                <div>
+                  <Row wrap={false}>
+                    <Col flex="auto">
+                      {todos.title}
+                    </Col>
+                    <Col flex="50px">
+                      {todos.done === true ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                    </Col>
+                    <Col flex="50px">
+                      <Popconfirm
+                        placement="bottomLeft"
+                        title={text}
+                        description={description}
+                        onConfirm={() => remove(todos.id)}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <Button type="primary">
+                          <DeleteOutlined />
+                        </Button>
+                      </Popconfirm>
+                    </Col>
+
+                  </Row>
+
+                </div>
+              )}
+            </div>
           </div>
         </Col>
         <Col span={8}>
-          <Title level={3}>In progress</Title>
+          <div className="rcorners2">
+            <div className="rcorners1" style={{ padding: '10px' }}>
+              <Title level={3}>In progress</Title>
+            </div>
+            <div style={{ padding: '10px' }}>
+
+            </div>
+          </div>
+
         </Col>
         <Col span={8}>
-          <Title level={3}>Done</Title>
+          <div className="rcorners2">
+            <div className="rcorners1" style={{ padding: '10px' }}>
+              <Title level={3}>Done</Title>
+            </div>
+            <div style={{ padding: '10px' }}>
+
+            </div>
+          </div>
         </Col>
       </Row>
     </div>
