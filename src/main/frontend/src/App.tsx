@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import './App.css';
 import { Button, Modal, Popconfirm, Col, Row, Typography } from 'antd';
-import { PlusOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 
 type Todo = {
   id: number;
@@ -13,7 +13,7 @@ type Todo = {
 function App() {
   const { Title } = Typography;
 
-  const [todos, setTodos] = useState<Todo[] | undefined>()
+  const [todos, setTodos] = useState<Todo[] | undefined>();
   const [todoItem, setTodoItem] = useState<string | undefined>();
   const onChange = (e: React.FormEvent<HTMLInputElement>) => setTodoItem(e.currentTarget.value);
 
@@ -28,6 +28,11 @@ function App() {
       })
       .finally(() => setIsLoading(false));
   };
+
+  useEffect(() => {
+    update();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const save = () => {
     const requestOptions = {
@@ -65,7 +70,6 @@ function App() {
   return (
     <div>
       <Title>ToDoApp</Title>
-
       <Row>
         <Col span={8}>
           <div className="rcorners2">
@@ -76,7 +80,7 @@ function App() {
                 </Col>
                 <Col flex="50px">
                   <h3>
-                    <Button type="primary" onClick={showModal}>
+                    <Button type="primary" onClick={showModal} style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
                       <PlusOutlined />
                     </Button>
                   </h3>
@@ -88,10 +92,21 @@ function App() {
             </div>
             <div style={{ padding: '10px' }}>
               {todos?.map((todo) => (
-                <div key={todo.id}>
+                <div key={todo.id} style={{ marginTop: '2px', marginBottom: '2px' }}>
                   <Row wrap={false}>
-                    <Col flex="auto">{todo.title}</Col>
-                    <Col flex="50px">{todo.done === true ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</Col>
+                    <Col flex="auto">
+                      {todo.title}{' '}
+                      {todo.done === true ? (
+                        <CheckOutlined style={{ color: 'green' }} />
+                      ) : (
+                        <CloseOutlined style={{ color: 'red' }} />
+                      )}
+                    </Col>
+                    <Col flex="50px">
+                      <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
+                        <EditOutlined />
+                      </Button>
+                    </Col>
                     <Col flex="50px">
                       <Popconfirm
                         placement="bottomLeft"
@@ -101,7 +116,7 @@ function App() {
                         okText="Yes"
                         cancelText="No"
                       >
-                        <Button type="primary">
+                        <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
                           <DeleteOutlined />
                         </Button>
                       </Popconfirm>
