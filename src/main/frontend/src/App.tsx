@@ -4,6 +4,7 @@ import './App.css';
 import { Button, Modal, Popconfirm, Col, Row, Typography } from 'antd';
 import { PlusOutlined, DeleteOutlined, CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { StrictModeDroppable } from './StrictModeDroppable';
 
 //type Todo = {
 //  id: number;
@@ -114,7 +115,7 @@ function App() {
     <div className="App">
       <h1>Drag and Drop</h1>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="todo">
+        <StrictModeDroppable droppableId="todo">
           {(provided) => (
             <div className="todo" {...provided.droppableProps} ref={provided.innerRef}>
               {todo.map(({ id, name }, index) => {
@@ -135,7 +136,7 @@ function App() {
               })}
             </div>
           )}
-        </Droppable>
+        </StrictModeDroppable>
       </DragDropContext>
     </div>
   );
