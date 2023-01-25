@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ITEMS")
+// @Table(name = "ITEMS")
 public class TodoItem {
 
     @Id
@@ -20,27 +20,27 @@ public class TodoItem {
 
     private String title;
     private boolean isDone;
-    private Number index;
+    // private Number index;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
+    // @ManyToOne(fetch = FetchType.EAGER)
+    // @JoinColumn(name = "cart_id", nullable = false)
+    // private Cart cart;
 
-    public Number getIndex() {
-        return index;
-    }
+    // public Number getIndex() {
+    // return index;
+    // }
+    //
+    // public void setIndex(Number index) {
+    // this.index = index;
+    // }
 
-    public void setIndex(Number index) {
-        this.index = index;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
+    // public Cart getCart() {
+    // return cart;
+    // }
+    //
+    // public void setCart(Cart cart) {
+    // this.cart = cart;
+    // }
 
     public String getTitle() {
         return title;
@@ -65,6 +65,8 @@ public class TodoItem {
         this.id = id;
         this.title = title;
         this.isDone = isDone;
+        // this.index = index;
+        // this.cart = cart;
     }
 
     public Long getId() {

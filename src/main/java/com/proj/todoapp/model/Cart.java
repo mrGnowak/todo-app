@@ -10,24 +10,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Entity
-@Table(name = "CART")
+//@Entity
+//@Table(name = "CART")
 public class Cart {
-
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    private String cartName;
-
-    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<TodoItem> todoItems;
-
-    public String getCartName() {
-        return cartName;
-    }
-
-    public void setCartName(String cartName) {
-        this.cartName = cartName;
-    }
+    //
+    // @Id
+    // @GeneratedValue
+    // private Long id;
+    //
+    // private String cartName;
+    //
+    // @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade =
+    // CascadeType.ALL)
+    // private Set<TodoItem> todoItems;
+    //
+    // public String getCartName() {
+    // return cartName;
+    // }
+    //
+    // public void setCartName(String cartName) {
+    // this.cartName = cartName;
+    // }
 }
