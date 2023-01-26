@@ -1,5 +1,7 @@
 package com.proj.todoapp.model;
 
+import jakarta.persistence.Column;
+
 //import javax.validation.constraints.NotBlank;
 
 import jakarta.persistence.Entity;
@@ -11,36 +13,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ITEMS")
 public class TodoItem {
 
     @Id
     @GeneratedValue
     private Long id;
-
+    @Column
     private String title;
+    @Column
     private boolean isDone;
-    private Number index;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
-
-    public Number getIndex() {
-        return index;
-    }
-
-    public void setIndex(Number index) {
-        this.index = index;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
 
     public String getTitle() {
         return title;
