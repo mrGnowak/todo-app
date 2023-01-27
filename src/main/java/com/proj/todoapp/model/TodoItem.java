@@ -1,16 +1,9 @@
 package com.proj.todoapp.model;
 
 import jakarta.persistence.Column;
-
-//import javax.validation.constraints.NotBlank;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 @Entity
 public class TodoItem {
@@ -22,6 +15,16 @@ public class TodoItem {
     private String title;
     @Column
     private boolean isDone;
+    @Column
+    private String columnName;
+
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
 
     public String getTitle() {
         return title;
@@ -42,10 +45,11 @@ public class TodoItem {
     public TodoItem() {
     }
 
-    public TodoItem(Long id, String title, boolean isDone) {
+    public TodoItem(Long id, String title, boolean isDone, String columnName) {
         this.id = id;
         this.title = title;
         this.isDone = isDone;
+        this.columnName = columnName;
     }
 
     public Long getId() {
