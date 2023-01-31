@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '.././App.css';
 import { Button, Modal, Popconfirm, Col, Row, Typography } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -16,7 +15,7 @@ type Todo = {
   //position: number;
 };
 
-export default function MainRender() {
+function MainRender() {
   const TODO = 'to-do';
   const DONE = 'done';
   const PROGRESS = 'progress';
@@ -26,9 +25,6 @@ export default function MainRender() {
   const [todoItem, setTodoItem] = useState<string | undefined>();
   const onChange = (e: React.FormEvent<HTMLInputElement>) => setTodoItem(e.currentTarget.value);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const text = 'Are you sure to delete this task?';
-  const description = 'Delete the task';
 
   const update = () => {
     if (isLoading) return;
@@ -46,7 +42,7 @@ export default function MainRender() {
       return;
     }
     const newTodos = Array.from(todos);
-    const index = newTodos.findIndex((todo) => todo.id === result.draggableId);
+    const index = newTodos.findIndex((todo) => todo.id.toString() === result.draggableId);
     const [removed] = newTodos.splice(index, 1);
 
     if (result.destination.droppableId === TODO) {
@@ -90,7 +86,7 @@ export default function MainRender() {
     fetch('api/remove/' + val, { method: 'DELETE' }).then(() => update());
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -111,10 +107,10 @@ export default function MainRender() {
       <div>
         <Button type="primary" onClick={showModal} style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
           <PlusOutlined />
-          <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            <input type="text" name="name" onChange={onChange} />
-          </Modal>
         </Button>
+        <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <input type="text" name="name" onChange={onChange} />
+        </Modal>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Row>
@@ -134,32 +130,7 @@ export default function MainRender() {
                             <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
                               {(provided) => (
                                 <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                                  <Row wrap={false}>
-                                    <Col flex="auto">
-                                      <div>{todo.title}</div>
-                                    </Col>
-                                    <Col flex="50px">
-                                      <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
-                                        <EditOutlined />
-                                      </Button>
-                                    </Col>
-                                    <Col flex="50px">
-                                      {
-                                        <Popconfirm
-                                          placement="bottomLeft"
-                                          title={text}
-                                          description={description}
-                                          onConfirm={() => remove(todo.id)}
-                                          okText="Yes"
-                                          cancelText="No"
-                                        >
-                                          <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
-                                            <DeleteOutlined />
-                                          </Button>
-                                        </Popconfirm>
-                                      }
-                                    </Col>
-                                  </Row>
+                                  <TodoItem title={todo.title} id={todo.id} />
                                 </div>
                               )}
                             </Draggable>
@@ -189,32 +160,7 @@ export default function MainRender() {
                             <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
                               {(provided) => (
                                 <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                                  <Row wrap={false}>
-                                    <Col flex="auto">
-                                      <div>{todo.title}</div>
-                                    </Col>
-                                    <Col flex="50px">
-                                      <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
-                                        <EditOutlined />
-                                      </Button>
-                                    </Col>
-                                    <Col flex="50px">
-                                      {
-                                        <Popconfirm
-                                          placement="bottomLeft"
-                                          title={text}
-                                          description={description}
-                                          onConfirm={() => remove(todo.id)}
-                                          okText="Yes"
-                                          cancelText="No"
-                                        >
-                                          <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
-                                            <DeleteOutlined />
-                                          </Button>
-                                        </Popconfirm>
-                                      }
-                                    </Col>
-                                  </Row>
+                                  <TodoItem title={todo.title} id={todo.id} />
                                 </div>
                               )}
                             </Draggable>
@@ -243,32 +189,7 @@ export default function MainRender() {
                             <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
                               {(provided) => (
                                 <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                                  <Row wrap={false}>
-                                    <Col flex="auto">
-                                      <div>{todo.title}</div>
-                                    </Col>
-                                    <Col flex="50px">
-                                      <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
-                                        <EditOutlined />
-                                      </Button>
-                                    </Col>
-                                    <Col flex="50px">
-                                      {
-                                        <Popconfirm
-                                          placement="bottomLeft"
-                                          title={text}
-                                          description={description}
-                                          onConfirm={() => remove(todo.id)}
-                                          okText="Yes"
-                                          cancelText="No"
-                                        >
-                                          <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
-                                            <DeleteOutlined />
-                                          </Button>
-                                        </Popconfirm>
-                                      }
-                                    </Col>
-                                  </Row>
+                                  <TodoItem title={todo.title} id={todo.id} />
                                 </div>
                               )}
                             </Draggable>
@@ -287,6 +208,7 @@ export default function MainRender() {
     </div>
   );
 }
+export default MainRender;
 
 //<Space wrap>
 //          <Button type="primary" value="Save" onClick={save}>Save</Button>
