@@ -39,8 +39,8 @@ public class TodoController {
         return todoRepo.save(todoItem);
     }
 
-    @PutMapping(value = "/put")
-    public TodoItem update(@NonNull @RequestBody TodoItem todoItem) {
+    @PutMapping(value = "/put", consumes = { "*/*" })
+    public TodoItem update(@NonNull @NotBlank @RequestBody TodoItem todoItem) {
         return todoRepo.save(todoItem);
     }
 
@@ -48,14 +48,4 @@ public class TodoController {
     public void remove(@PathVariable Long id) {
         todoRepo.deleteById(id);
     }
-
-    // @DeleteMapping(value = "/remove/{title}")
-    // public void remove(@PathVariable String title) {
-    // todoRepo.removeByTitle(title);
-    // }
-    // @DeleteMapping(value = "/remove/{title}")
-    // public void remove(@PathVariable String title) {
-    // todoRepo.deleteByTitle(title);
-    // }
-
-}//
+}
