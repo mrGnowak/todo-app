@@ -1,32 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import '.././App.css';
-import { Button, Modal, Popconfirm, Col, Row, Typography } from 'antd';
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { DragDropContext, Draggable } from 'react-beautiful-dnd';
+import { Button, Modal, Col, Row, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 import { StrictModeDroppable } from './StrictModeDroppable';
 import TodoItem from './TodoItem';
+import { Todo } from './types';
 
-type Todo = {
-  id: number;
-  columnName: string;
-  title: string;
-  isDone: boolean;
-
-  //position: number;
-};
+const TODO = 'to-do';
+const DONE = 'done';
+const PROGRESS = 'progress';
 
 function MainRender() {
-  const TODO = 'to-do';
-  const DONE = 'done';
-  const PROGRESS = 'progress';
-
   const { Title } = Typography;
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoItem, setTodoItem] = useState<string | undefined>();
   const onChange = (e: React.FormEvent<HTMLInputElement>) => setTodoItem(e.currentTarget.value);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const update = () => {
+  const update = React.useCallback(() => {
     if (isLoading) return;
     setIsLoading(true);
     fetch('api/get')
@@ -35,9 +27,9 @@ function MainRender() {
         setTodos(data as Todo[]);
       })
       .finally(() => setIsLoading(false));
-  };
+  }, [isLoading]);
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }
@@ -82,33 +74,31 @@ function MainRender() {
       .then(() => update());
   };
 
-  const remove = (val: number) => {
-    fetch('api/remove/' + val, { method: 'DELETE' }).then(() => update());
-  };
+  const onRemove = React.useCallback(
+    (id: number) => {
+      fetch('api/remove/' + id, { method: 'DELETE' }).then(() => update());
+    },
+    [update]
+  );
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-    save();
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <div>
       <Title>ToDoApp</Title>
       <div>
-        <Button type="primary" onClick={showModal} style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
+        <Button type="primary" onClick={() => setIsModalOpen(true)} style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
           <PlusOutlined />
         </Button>
-        <Modal title="Add new task: " open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Modal
+          title="Add new task: "
+          open={isModalOpen}
+          onOk={() => {
+            setIsModalOpen(false);
+            save();
+          }}
+          onCancel={() => setIsModalOpen(false)}
+        >
           <input type="text" name="name" onChange={onChange} />
         </Modal>
       </div>
@@ -130,7 +120,7 @@ function MainRender() {
                             <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
                               {(provided) => (
                                 <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                                  <TodoItem title={todo.title} id={todo.id} />
+                                  <TodoItem item={todo} onRemove={onRemove} />
                                 </div>
                               )}
                             </Draggable>
@@ -160,7 +150,7 @@ function MainRender() {
                             <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
                               {(provided) => (
                                 <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                                  <TodoItem title={todo.title} id={todo.id} />
+                                  <TodoItem item={todo} onRemove={onRemove} />
                                 </div>
                               )}
                             </Draggable>
@@ -189,7 +179,7 @@ function MainRender() {
                             <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
                               {(provided) => (
                                 <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                                  <TodoItem title={todo.title} id={todo.id} />
+                                  <TodoItem item={todo} onRemove={onRemove} />
                                 </div>
                               )}
                             </Draggable>

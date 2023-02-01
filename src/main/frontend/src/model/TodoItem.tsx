@@ -1,17 +1,22 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Col, Popconfirm, Row } from 'antd';
-import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from 'react';
+import { Todo } from './types';
 
-export default function TodoItem({ title, id }: { title: string; id: number }) {
-  const text = 'Are you sure to delete this task?';
-  const description = 'Delete the task';
+const text = 'Are you sure to delete this task?';
+const description = 'Delete the task';
 
+type Props = {
+  onRemove: (todoId: number) => void;
+  item: Todo;
+};
+
+export default function TodoItem({ item, onRemove }: Props) {
   return (
     <>
       <div style={{ marginTop: '2px', marginBottom: '2px' }}>
         <Row wrap={false}>
           <Col flex="auto">
-            <div>{title}</div>
+            <div>{item.title}</div>
           </Col>
           <Col flex="50px">
             <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
@@ -19,20 +24,18 @@ export default function TodoItem({ title, id }: { title: string; id: number }) {
             </Button>
           </Col>
           <Col flex="50px">
-            {
-              <Popconfirm
-                placement="bottomLeft"
-                title={text}
-                description={description}
-                //onConfirm={} ----------- funcja remove
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
-                  <DeleteOutlined />
-                </Button>
-              </Popconfirm>
-            }
+            <Popconfirm
+              placement="bottomLeft"
+              title={text}
+              description={description}
+              onConfirm={() => onRemove(item.id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary" style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
+                <DeleteOutlined />
+              </Button>
+            </Popconfirm>
           </Col>
         </Row>
       </div>
