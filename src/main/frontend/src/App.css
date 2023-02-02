@@ -55,6 +55,11 @@
   box-shadow: 5px 5px 10px;
 }
 
+.rcorners3 {
+  min-height: 395px;
+}
+
+
 .padding {
   padding: 10x;
 }

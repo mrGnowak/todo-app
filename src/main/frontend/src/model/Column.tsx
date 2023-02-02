@@ -15,33 +15,36 @@ type Props = {
 export default function Column({ onRemove, colName, titleColumn, todos, onUpdate }: Props) {
   return (
     <>
-      <StrictModeDroppable droppableId={colName}>
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            <div className="rcorners2">
-              <div className="rcorners1" style={{ padding: '10px' }}>
-                <Title level={3}>{titleColumn}</Title>
-              </div>
-              <div style={{ padding: '10px' }}>
-                <div>
-                  {todos
-                    .filter((todo) => todo.columnName === colName)
-                    .map((todo, index) => (
-                      <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
-                        {(provided) => (
-                          <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                            <TodoItem item={todo} onRemove={onRemove} onUpdate={onUpdate} />
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
+      <div className="rcorners2">
+        <div className="rcorners1" style={{ padding: '10px' }}>
+          <Title level={3}>{titleColumn}</Title>
+        </div>
+        <StrictModeDroppable droppableId={colName}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              <div className="rcorners3">
+                <div style={{ padding: '10px' }}>
+                  <div>
+                    {todos
+                      .filter((todo) => todo.columnName === colName)
+                      .map((todo, index) => (
+                        <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
+                          {(provided) => (
+                            <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                              <TodoItem item={todo} onRemove={onRemove} onUpdate={onUpdate} />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                  </div>
                 </div>
               </div>
+
+              {provided.placeholder}
             </div>
-            {provided.placeholder}
-          </div>
-        )}
-      </StrictModeDroppable>
+          )}
+        </StrictModeDroppable>
+      </div>
     </>
   );
 }
