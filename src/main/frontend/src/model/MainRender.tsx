@@ -46,17 +46,8 @@ export default function MainRender() {
 
     newTodos.splice(result.destination.index, 0, removed);
 
-    //const newColumn = newTodos.filter((todo) => todo.columnName === removed.columnName);
-    //newColumn.forEach((todo, index) => {
-    //  todo.position = index;
-    //});
     setTodos(newTodos);
-    {
-      //poprawić, żeby odświerzało tylko jeden raz a nie wszystko
-      todos.map((todo) => {
-        onUpdate(todo.id, todo.title, todo.columnName);
-      });
-    }
+    onUpdate(removed.id, removed.title, removed.columnName);
   };
 
   useEffect(() => {
