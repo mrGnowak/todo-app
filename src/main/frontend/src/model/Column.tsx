@@ -6,7 +6,7 @@ import { Todo } from './types';
 
 type Props = {
   onRemove: (todoId: number) => void;
-  onUpdate: (todoId: number, title: string, itemColumnName: string) => void;
+  onUpdate: (todoId: number, title: string, itemColumnName: string, positionInColumn: number) => void;
   colName: string;
   titleColumn: string;
   todos: Todo[];

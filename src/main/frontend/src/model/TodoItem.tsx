@@ -8,7 +8,7 @@ const description = 'Delete the task';
 
 type Props = {
   onRemove: (todoId: number) => void;
-  onUpdate: (todoId: number, title: string, itemColumnName: string) => void;
+  onUpdate: (todoId: number, title: string, itemColumnName: string, positionInColumn: number) => void;
   item: Todo;
 };
 
@@ -36,7 +36,7 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
               open={isModalOpen}
               onOk={() => {
                 setIsModalOpen(false);
-                onUpdate(item.id, editedTitle, item.columnName);
+                onUpdate(item.id, editedTitle, item.columnName, item.posInCol);
               }}
               onCancel={() => setIsModalOpen(false)}
             >
@@ -45,7 +45,7 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
                 name="name"
                 onPressEnter={() => {
                   setIsModalOpen(false);
-                  onUpdate(item.id, editedTitle, item.columnName);
+                  onUpdate(item.id, editedTitle, item.columnName, item.posInCol);
                 }}
                 onChange={onChange}
               />

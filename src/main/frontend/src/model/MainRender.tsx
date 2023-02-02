@@ -37,17 +37,20 @@ export default function MainRender() {
     const [removed] = newTodos.splice(index, 1);
 
     if (result.destination.droppableId === TODO) {
+      removed.posInCol = index;
       removed.columnName = TODO;
     } else if (result.destination.droppableId === DONE) {
+      removed.posInCol = index;
       removed.columnName = DONE;
     } else if (result.destination.droppableId === PROGRESS) {
+      removed.posInCol = index;
       removed.columnName = PROGRESS;
     }
 
     newTodos.splice(result.destination.index, 0, removed);
 
     setTodos(newTodos);
-    onUpdate(removed.id, removed.title, removed.columnName);
+    onUpdate(removed.id, removed.title, removed.columnName, result.destination.index);
   };
 
   useEffect(() => {
@@ -60,7 +63,7 @@ export default function MainRender() {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: todoItem, columnName: TODO }),
+        body: JSON.stringify({ title: todoItem, columnName: TODO, posInCol: '0' }),
       };
       fetch('api/save', requestOptions)
         .then((response) => response.json())
@@ -77,12 +80,17 @@ export default function MainRender() {
   );
 
   const onUpdate = useCallback(
-    (itemId: number, itemTitle: string, itemColumnName: string) => {
+    (itemId: number, itemTitle: string, itemColumnName: string, positionInColumn: number) => {
       if (itemTitle !== undefined && itemTitle.trim().length !== 0) {
         fetch('api/put', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: itemId, title: itemTitle, columnName: itemColumnName }),
+          body: JSON.stringify({
+            id: itemId,
+            title: itemTitle,
+            columnName: itemColumnName,
+            posInCol: positionInColumn,
+          }),
         })
           .then((response) => response.json())
           .then(() => refresh());

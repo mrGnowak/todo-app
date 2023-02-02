@@ -4,8 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Data;
 
 @Entity
+@Data
 public class TodoItem {
 
     @Id
@@ -17,46 +19,18 @@ public class TodoItem {
     private boolean isDone;
     @Column
     private String columnName;
-
-    public String getColumnName() {
-        return columnName;
-    }
-
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isDone() {
-        return isDone;
-    }
-
-    public void setDone(boolean isDone) {
-        this.isDone = isDone;
-    }
+    @Column
+    private Integer posInCol;
 
     public TodoItem() {
     }
 
-    public TodoItem(Long id, String title, boolean isDone, String columnName) {
+    public TodoItem(Long id, String title, boolean isDone, String columnName, Integer posInCol) {
+
         this.id = id;
         this.title = title;
         this.isDone = isDone;
         this.columnName = columnName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.posInCol = posInCol;
     }
 }

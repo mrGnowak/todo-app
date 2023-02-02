@@ -3,6 +3,5 @@ export type Todo = {
   columnName: string;
   title: string;
   isDone: boolean;
-
-  //position: number;
+  posInCol: number;
 };
