@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Col, Modal, Popconfirm, Row } from 'antd';
+import { Button, Col, Input, Modal, Popconfirm, Row } from 'antd';
 import { useState } from 'react';
 import { Todo } from './types';
 
@@ -32,7 +32,7 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
               <EditOutlined />
             </Button>
             <Modal
-              title="Zmień tytuł: "
+              title="Change task description: "
               open={isModalOpen}
               onOk={() => {
                 setIsModalOpen(false);
@@ -40,7 +40,15 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
               }}
               onCancel={() => setIsModalOpen(false)}
             >
-              <input type="text" name="name" onChange={onChange} />
+              <Input
+                type="text"
+                name="name"
+                onPressEnter={() => {
+                  setIsModalOpen(false);
+                  onUpdate(item.id, editedTitle, item.columnName);
+                }}
+                onChange={onChange}
+              />
             </Modal>
           </Col>
           <Col flex="50px">

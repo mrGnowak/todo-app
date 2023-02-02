@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import '.././App.css';
 import { Button, Col, Row, Typography, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -65,32 +65,37 @@ export default function MainRender() {
   }, []);
 
   const save = () => {
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: todoItem, columnName: TODO }),
-    };
-    fetch('api/save', requestOptions)
-      .then((response) => response.json())
-      .then(() => refresh());
+    if (todoItem !== undefined && todoItem.trim().length !== 0) {
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: todoItem, columnName: TODO }),
+      };
+      fetch('api/save', requestOptions)
+        .then((response) => response.json())
+        .then(() => refresh())
+        .then(() => setTodoItem(''));
+    }
   };
 
-  const onRemove = React.useCallback(
+  const onRemove = useCallback(
     (id: number) => {
       fetch('api/remove/' + id, { method: 'DELETE' }).then(() => refresh());
     },
     [refresh]
   );
 
-  const onUpdate = React.useCallback(
+  const onUpdate = useCallback(
     (itemId: number, itemTitle: string, itemColumnName: string) => {
-      fetch('api/put', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: itemId, title: itemTitle, columnName: itemColumnName }),
-      })
-        .then((response) => response.json())
-        .then(() => refresh());
+      if (itemTitle !== undefined && itemTitle.trim().length !== 0) {
+        fetch('api/put', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: itemId, title: itemTitle, columnName: itemColumnName }),
+        })
+          .then((response) => response.json())
+          .then(() => refresh());
+      }
     },
     [refresh]
   );
@@ -98,7 +103,14 @@ export default function MainRender() {
   return (
     <>
       <Title>TO DO APP</Title>
-      <Input style={{ maxWidth: 500, margin: '5px' }} type="text" name="name" onChange={onChange} />
+      <Input
+        style={{ maxWidth: 500, margin: '5px' }}
+        value={todoItem}
+        onPressEnter={save}
+        type="text"
+        name="name"
+        onChange={onChange}
+      />
       <Button type="primary" onClick={save} style={{ backgroundColor: 'rgb(120, 120, 120)' }}>
         <PlusOutlined />
       </Button>
