@@ -1,4 +1,5 @@
 import Title from 'antd/es/typography/Title';
+import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { StrictModeDroppable } from './StrictModeDroppable';
 import TodoItem from './TodoItem';
@@ -25,17 +26,15 @@ export default function Column({ onRemove, colName, titleColumn, todos, onUpdate
               <div className="rcorners3">
                 <div style={{ padding: '10px' }}>
                   <div>
-                    {todos
-                      .filter((todo) => todo.columnName === colName)
-                      .map((todo, index) => (
-                        <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
-                          {(provided) => (
-                            <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                              <TodoItem item={todo} onRemove={onRemove} onUpdate={onUpdate} />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
+                    {todos.map((todo, index) => (
+                      <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
+                        {(provided) => (
+                          <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                            <TodoItem item={todo} onRemove={onRemove} onUpdate={onUpdate} />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
                   </div>
                 </div>
               </div>

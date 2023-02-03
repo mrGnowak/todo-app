@@ -21,7 +21,9 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
       <div style={{ marginTop: '2px', marginBottom: '2px' }}>
         <Row wrap={false}>
           <Col flex="auto">
-            <div>{item.title}</div>
+            <div>
+              {item.title} #{item.posInCol}
+            </div>
           </Col>
           <Col flex="50px">
             <Button

@@ -10,6 +10,12 @@ const TODO = 'to-do';
 const DONE = 'done';
 const PROGRESS = 'progress';
 
+function prepareColumn(todos: Todo[], colName: string) {
+  return todos.filter((todo) => todo.columnName === colName).sort((a, b) => a.posInCol - b.posInCol);
+}
+
+const columnsDefinition = [TODO, DONE, PROGRESS];
+
 export default function MainRender() {
   const { Title } = Typography;
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -28,29 +34,38 @@ export default function MainRender() {
       .finally(() => setIsLoading(false));
   }, [isLoading]);
 
+  const cols = React.useMemo(
+    () =>
+      columnsDefinition.reduce((acc, name) => {
+        acc[name] = prepareColumn(todos, name);
+        return acc;
+      }, {} as { [key: string]: Todo[] }),
+    [todos]
+  );
+
   const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
+    const dst = result.destination;
+    const src = result.source;
+
+    if (!dst) {
       return;
     }
-    const newTodos = Array.from(todos);
-    const index = newTodos.findIndex((todo) => todo.id.toString() === result.draggableId);
-    const [removed] = newTodos.splice(index, 1);
 
-    if (result.destination.droppableId === TODO) {
-      removed.posInCol = index;
-      removed.columnName = TODO;
-    } else if (result.destination.droppableId === DONE) {
-      removed.posInCol = index;
-      removed.columnName = DONE;
-    } else if (result.destination.droppableId === PROGRESS) {
-      removed.posInCol = index;
-      removed.columnName = PROGRESS;
+    if (src.droppableId === dst.droppableId) {
+      console.log(src.droppableId);
+      const currentCol = cols?.[src.droppableId as keyof typeof cols];
+      if (currentCol == null) {
+        return;
+      }
+      const dstObj = currentCol[dst.index];
+      const srcObj = currentCol[src.index];
+
+      onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.posInCol);
+      onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.posInCol);
+    } else {
+      const srcObj = cols?.[src.droppableId as keyof typeof cols]?.[src.index];
+      onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
     }
-
-    newTodos.splice(result.destination.index, 0, removed);
-
-    setTodos(newTodos);
-    onUpdate(removed.id, removed.title, removed.columnName, result.destination.index);
   };
 
   useEffect(() => {
@@ -63,7 +78,7 @@ export default function MainRender() {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: todoItem, columnName: TODO, posInCol: '0' }),
+        body: JSON.stringify({ title: todoItem, columnName: TODO, posInCol: todos.length }),
       };
       fetch('api/save', requestOptions)
         .then((response) => response.json())
@@ -116,19 +131,19 @@ export default function MainRender() {
       <DragDropContext onDragEnd={onDragEnd}>
         <Row>
           <Col span={8}>
-            <Column onRemove={onRemove} colName={TODO} titleColumn={'TODO'} todos={todos} onUpdate={onUpdate} />
+            <Column onRemove={onRemove} colName={TODO} titleColumn={'TODO'} todos={cols[TODO]} onUpdate={onUpdate} />
           </Col>
           <Col span={8}>
             <Column
               onRemove={onRemove}
               colName={PROGRESS}
               titleColumn={'IN PROGRESS'}
-              todos={todos}
+              todos={cols[PROGRESS]}
               onUpdate={onUpdate}
             />
           </Col>
           <Col span={8}>
-            <Column onRemove={onRemove} colName={DONE} titleColumn={'DONE'} todos={todos} onUpdate={onUpdate} />
+            <Column onRemove={onRemove} colName={DONE} titleColumn={'DONE'} todos={cols[DONE]} onUpdate={onUpdate} />
           </Col>
         </Row>
       </DragDropContext>
