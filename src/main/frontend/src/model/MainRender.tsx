@@ -5,7 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Todo } from './types';
 import Column from './Column';
-import { LinkedList } from './linkedList/LinkedList';
+import { linkedList, LinkedList } from './linkedList/LinkedList';
 
 const TODO = 'to-do';
 const DONE = 'done';
@@ -115,33 +115,36 @@ export default function MainRender() {
     },
     [refresh]
   );
-  const linkedList = new LinkedList<Todo>();
+  //const linkedList = new LinkedList<Todo>();
   const linkedListTodo = new LinkedList<Todo>();
   const linkedListProgress = new LinkedList<Todo>();
   const linkedListDone = new LinkedList<Todo>();
 
   //function LinkedListFiltr() {
+  //teraz działą tak, że jeśli sie nie mieści to przenosi na koniec, a trzeba by było dodać wsuwanie w liste
+  let TodoTemp = 0;
+  let ProgressTemp = 0;
+  let DoneTemp = 0;
   for (let i = 0; i < todos.length; i++) {
-    //let TodoTemp = 0;
-    //let ProgressTemp = 0;
-    //let DoneTemp = 0;
     if (todos[i].columnName === TODO) {
       linkedListTodo.insertInBegin(todos[i]);
-      //todos[i].posInCol = TodoTemp;
-      //TodoTemp += 1;
+      todos[i].posInCol = TodoTemp;
+      TodoTemp += 1;
     } else if (todos[i].columnName === PROGRESS) {
       linkedListProgress.insertInBegin(todos[i]);
-      //todos[i].posInCol = ProgressTemp;
-      //ProgressTemp += 1;
+      todos[i].posInCol = ProgressTemp;
+      ProgressTemp += 1;
     } else if (todos[i].columnName === DONE) {
       linkedListDone.insertInBegin(todos[i]);
-      //todos[i].posInCol = DoneTemp;
-      //DoneTemp += 1;
+      todos[i].posInCol = DoneTemp;
+      DoneTemp += 1;
     }
-    linkedList.insertInBegin(todos[i]);
-    todos[i].posInCol = i;
+    //
+
+    //todos[i].posInCol = i;
     //}
   }
+  const newLinkedList = JSON.stringify(linkedList);
   const newLinkedListTodo = JSON.stringify(linkedListTodo);
   const newLinkedListProgress = JSON.stringify(linkedListProgress);
   const newLinkedListDone = JSON.stringify(linkedListDone);
@@ -182,6 +185,7 @@ export default function MainRender() {
       <div>TODO {newLinkedListTodo} koniec</div>
       <div>PROGRESS {newLinkedListProgress} koniec</div>
       <div>DONE {newLinkedListDone} koniec</div>
+      <div>{newLinkedList}</div>
     </>
   );
 }

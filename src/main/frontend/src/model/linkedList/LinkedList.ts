@@ -46,6 +46,8 @@ export class LinkedList<T> implements ILinkedList<T> {
   
       return this.head ? checkNext(this.head) : null;
     }
+
+
   
     public traverse(): T[] {
       const array: T[] = [];
@@ -64,17 +66,15 @@ export class LinkedList<T> implements ILinkedList<T> {
       return this.traverse().length;
     }
   }
-  //interface Post {
-  //  title: string;
-  //}
-  // export const linkedList = new LinkedList<Todo>();
-  
-  //linkedList.traverse() // [];
-  //linkedList.insertInBegin({ title: "Post A" });
-  //linkedList.insertInBegin({ title: "Post B" });
-  //linkedList.insertInBegin({ title: "Post C" });
-  //linkedList.insertInBegin({ title: "Post D" });
-  
-  //linkedList.traverse() // [{ title : "Post D" }, { title : "Post C" }, { title : "Post A" }, { title : "Post B" }];
-  //linkedList.search(({ title }) => title === "Post C") // Node { data: { title: "Post A" }, prev: Node, next: Node};
+  interface Post {
+    title: string;
+  }
+   export const linkedList = new LinkedList<Post>();
+    linkedList.traverse() // [];
+  linkedList.insertInBegin({ title: "Post A" });
+  linkedList.insertInBegin({ title: "Post B" });
+  linkedList.insertInBegin({ title: "Post C" });
+  linkedList.insertInBegin({ title: "Post D" });
+    linkedList.traverse() // [{ title : "Post D" }, { title : "Post C" }, { title : "Post A" }, { title : "Post B" }];
+  linkedList.search(({ title }) => title === "Post C") // Node { data: { title: "Post A" }, prev: Node, next: Node};
   
