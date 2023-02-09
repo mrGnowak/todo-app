@@ -1,7 +1,8 @@
-import Node from "./node";
+import Node from "./Node";
 import { ILinkedList } from "./ILinkedList";
+import { Todo } from "../types";
 
-class LinkedList<T> implements ILinkedList<T> {
+export class LinkedList<T> implements ILinkedList<T> {
     private head: Node<T> | null = null;
     
     public insertInBegin(data: T): Node<T> {
@@ -18,6 +19,21 @@ class LinkedList<T> implements ILinkedList<T> {
     public deleteNode(node: Node<T>): void {
         this.head = node.next;
       
+    }
+
+    public insertAtEnd(data: T): Node<T> {
+      const node = new Node(data);
+      if (!this.head) {
+        this.head = node;
+      } else {
+        const getLast = (node: Node<T>): Node<T> => {
+          return node.next ? getLast(node.next) : node;
+        };
+
+        const lastNode = getLast(this.head);
+        lastNode.next = node;
+    }
+    return node;
     }
   
     public search(comparator: (data: T) => boolean): Node<T> | null {
@@ -48,16 +64,17 @@ class LinkedList<T> implements ILinkedList<T> {
       return this.traverse().length;
     }
   }
-  interface Post {
-    title: string;
-  }
-  const linkedList = new LinkedList<Post>();
+  //interface Post {
+  //  title: string;
+  //}
+  // export const linkedList = new LinkedList<Todo>();
   
-  linkedList.traverse() // [];
+  //linkedList.traverse() // [];
+  //linkedList.insertInBegin({ title: "Post A" });
+  //linkedList.insertInBegin({ title: "Post B" });
+  //linkedList.insertInBegin({ title: "Post C" });
+  //linkedList.insertInBegin({ title: "Post D" });
   
-  linkedList.insertInBegin({ title: "Post C" });
-  linkedList.insertInBegin({ title: "Post D" });
-  
-  linkedList.traverse() // [{ title : "Post D" }, { title : "Post C" }, { title : "Post A" }, { title : "Post B" }];
-  linkedList.search(({ title }) => title === "Post A") // Node { data: { title: "Post A" }, prev: Node, next: Node};
+  //linkedList.traverse() // [{ title : "Post D" }, { title : "Post C" }, { title : "Post A" }, { title : "Post B" }];
+  //linkedList.search(({ title }) => title === "Post C") // Node { data: { title: "Post A" }, prev: Node, next: Node};
   
