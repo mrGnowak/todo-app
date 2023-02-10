@@ -61,11 +61,11 @@ export default function MainRender() {
       const dstObj = currentCol[dst.index];
       const srcObj = currentCol[src.index];
 
-      //onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.posInCol);
-      //onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.posInCol);
+      onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.posInCol);
+      onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.posInCol);
     } else {
       const srcObj = cols?.[src.droppableId as keyof typeof cols]?.[src.index];
-      // onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
+      onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
     }
   };
 
