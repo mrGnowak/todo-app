@@ -16,21 +16,18 @@ public class TodoItem {
     @Column
     private String title;
     @Column
-    private boolean isDone;
-    @Column
     private String columnName;
     @Column
-    private Integer posInCol;
+    private Long nextId;
 
     public TodoItem() {
     }
 
-    public TodoItem(Long id, String title, boolean isDone, String columnName, Integer posInCol) {
+    public TodoItem(Long id, String title, String columnName, Long nextId) {
 
         this.id = id;
         this.title = title;
-        this.isDone = isDone;
         this.columnName = columnName;
-        this.posInCol = posInCol;
+        this.nextId = nextId;
     }
 }

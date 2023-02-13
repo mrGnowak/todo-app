@@ -8,11 +8,12 @@ const description = 'Delete the task';
 
 type Props = {
   onRemove: (todoId: number) => void;
-  onUpdate: (todoId: number, title: string, itemColumnName: string, positionInColumn: number) => void;
+  onUpdate: (todoId: number, title: string, itemColumnName: string, nextId: number) => void;
   item: Todo;
+  index: number;
 };
 
-export default function TodoItem({ item, onRemove, onUpdate }: Props) {
+export default function TodoItem({ item, onRemove, onUpdate, index }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>('');
   const onChange = (e: React.FormEvent<HTMLInputElement>) => setEditedTitle(e.currentTarget.value);
@@ -22,7 +23,7 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
         <Row wrap={false}>
           <Col flex="auto">
             <div>
-              {item.title} #{item.posInCol}
+              {item.title} #{item.nextId} index:{index}
             </div>
           </Col>
           <Col flex="50px">
@@ -38,7 +39,7 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
               open={isModalOpen}
               onOk={() => {
                 setIsModalOpen(false);
-                onUpdate(item.id, editedTitle, item.columnName, item.posInCol);
+                onUpdate(item.id, editedTitle, item.columnName, item.nextId);
               }}
               onCancel={() => setIsModalOpen(false)}
             >
@@ -47,7 +48,7 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
                 name="name"
                 onPressEnter={() => {
                   setIsModalOpen(false);
-                  onUpdate(item.id, editedTitle, item.columnName, item.posInCol);
+                  onUpdate(item.id, editedTitle, item.columnName, item.nextId);
                 }}
                 onChange={onChange}
               />

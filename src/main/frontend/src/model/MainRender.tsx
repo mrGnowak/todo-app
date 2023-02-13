@@ -11,7 +11,7 @@ const DONE = 'done';
 const PROGRESS = 'progress';
 
 function prepareColumn(todos: Todo[], colName: string) {
-  return todos.filter((todo) => todo.columnName === colName).sort((a, b) => a.posInCol - b.posInCol);
+  return todos.filter((todo) => todo.columnName === colName);
 }
 
 const columnsDefinition = [TODO, DONE, PROGRESS];
@@ -60,8 +60,8 @@ export default function MainRender() {
       const dstObj = currentCol[dst.index];
       const srcObj = currentCol[src.index];
 
-      onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.posInCol);
-      onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.posInCol);
+      onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.nextId);
+      onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.nextId);
     } else {
       const srcObj = cols?.[src.droppableId as keyof typeof cols]?.[src.index];
       onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
@@ -78,7 +78,7 @@ export default function MainRender() {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: todoItem, columnName: TODO, posInCol: todos.length }),
+        body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todos[0].id }),
       };
       fetch('api/save', requestOptions)
         .then((response) => response.json())
@@ -95,7 +95,7 @@ export default function MainRender() {
   );
 
   const onUpdate = useCallback(
-    (itemId: number, itemTitle: string, itemColumnName: string, positionInColumn: number) => {
+    (itemId: number, itemTitle: string, itemColumnName: string, nextId: number) => {
       if (itemTitle !== undefined && itemTitle.trim().length !== 0) {
         fetch('api/put', {
           method: 'PUT',
@@ -104,7 +104,7 @@ export default function MainRender() {
             id: itemId,
             title: itemTitle,
             columnName: itemColumnName,
-            posInCol: positionInColumn,
+            nextId: nextId,
           }),
         })
           .then((response) => response.json())

@@ -30,7 +30,7 @@ export default function Column({ onRemove, colName, titleColumn, todos, onUpdate
                       <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
                         {(provided) => (
                           <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                            <TodoItem item={todo} onRemove={onRemove} onUpdate={onUpdate} />
+                            <TodoItem item={todo} onRemove={onRemove} onUpdate={onUpdate} index={index} />
                           </div>
                         )}
                       </Draggable>
