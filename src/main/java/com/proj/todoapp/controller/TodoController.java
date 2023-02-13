@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.proj.todoapp.model.TodoItem;
 import com.proj.todoapp.repository.TodoRepo;
+import com.proj.todoapp.service.LinkedList;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.validation.constraints.NotBlank;
@@ -25,13 +26,15 @@ import jakarta.validation.constraints.NotBlank;
 public class TodoController {
 
     Logger logger = LoggerFactory.getLogger(TodoController.class);
+    @Autowired
+    LinkedList linkedList;
 
     @Autowired
     private TodoRepo todoRepo;
 
-    @GetMapping(value = "/get")
-    public List<TodoItem> findAll() {
-        return todoRepo.findAll();
+    @GetMapping(value = "/get/{colName}")
+    public List<TodoItem> findForCols(@PathVariable String colName) {
+        return linkedList.createArray(colName);
     }
 
     @PostMapping(value = "/save", consumes = { "*/*" })

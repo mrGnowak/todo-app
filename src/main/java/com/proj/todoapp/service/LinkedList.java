@@ -23,17 +23,16 @@ public class LinkedList {
     @Autowired
     TodoRepo todoRepo;
 
-    List<TodoItem> todoItems = new ArrayList<TodoItem>();
-    List<TodoItem> newTodoItems = new ArrayList<TodoItem>();
-    Object tempObject = new Object();
-
-    @PostConstruct
-    public void filtr() {
-        String colName = "to-do";
-        createArray(colName);
-    }
+    // @PostConstruct
+    // public void filtr() {
+    // String colName = "to-do";
+    // createArray(colName);
+    // }
 
     public List<TodoItem> createArray(String colName) {
+
+        List<TodoItem> todoItems = new ArrayList<TodoItem>();
+        List<TodoItem> newTodoItems = new ArrayList<TodoItem>();
 
         todoItems = todoRepo.findByColumnName(colName);
         System.out.println("Dane z obrębie kolumny do filtrowania: \n " + todoItems);
