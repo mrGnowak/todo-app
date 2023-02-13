@@ -26,11 +26,17 @@ import jakarta.validation.constraints.NotBlank;
 public class TodoController {
 
     Logger logger = LoggerFactory.getLogger(TodoController.class);
+
     @Autowired
     LinkedList linkedList;
 
     @Autowired
     private TodoRepo todoRepo;
+
+    @GetMapping(value = "/get")
+    public List<TodoItem> getAll() {
+        return todoRepo.findAll();
+    }
 
     @GetMapping(value = "/get/{colName}")
     public List<TodoItem> findForCols(@PathVariable String colName) {
@@ -45,6 +51,11 @@ public class TodoController {
     @PutMapping(value = "/put", consumes = { "*/*" })
     public TodoItem update(@NonNull @NotBlank @RequestBody TodoItem todoItem) {
         return todoRepo.save(todoItem);
+    }
+
+    @PostMapping(value = "/save/{dstId}/{srcId}/{dstColName}", consumes = { "*/*" })
+    public void updateDroppable(@PathVariable Long dstId, Long srcId, String dstColName) {
+        linkedList.updateDroppable(dstId, srcId, dstColName);
     }
 
     @DeleteMapping(value = "/remove/{id}")

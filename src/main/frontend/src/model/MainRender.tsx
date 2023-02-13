@@ -18,63 +18,40 @@ const columnsDefinition = [TODO, DONE, PROGRESS];
 
 export default function MainRender() {
   const { Title } = Typography;
-  const [todoCol, setTodo] = useState<Todo[]>([]);
-  const [progressCol, setProgress] = useState<Todo[]>([]);
-  const [doneCol, setDone] = useState<Todo[]>([]);
+  const [todos, setTodo] = useState<Todo[]>([]);
+  const [todoCol, setTodoCol] = useState<Todo[]>([]);
+  const [progressCol, setProgressCol] = useState<Todo[]>([]);
+  const [doneCol, setDoneCol] = useState<Todo[]>([]);
 
   const [todoItem, setTodoItem] = useState<string | undefined>();
   const onChange = (e: React.FormEvent<HTMLInputElement>) => setTodoItem(e.currentTarget.value);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const refresh = React.useCallback(() => {
-    //if (isLoading) return;
-    //setIsLoading(true);
-    fetch('api/get/' + TODO)
+    if (isLoading) return;
+    setIsLoading(true);
+    fetch('api/get')
       .then((response) => response.json())
       .then((data) => {
         setTodo(data as Todo[]);
       });
+    fetch('api/get/' + TODO)
+      .then((response) => response.json())
+      .then((data) => {
+        setTodoCol(data as Todo[]);
+      });
     fetch('api/get/' + PROGRESS)
       .then((response) => response.json())
       .then((data) => {
-        setProgress(data as Todo[]);
+        setProgressCol(data as Todo[]);
       });
     fetch('api/get/' + DONE)
       .then((response) => response.json())
       .then((data) => {
-        setDone(data as Todo[]);
-      });
-  }, []);
-
-  //const refresh2 = React.useCallback(() => {
-  //  if (isLoading) return;
-  //  setIsLoading(true);
-  //  fetch('api/get/' + PROGRESS)
-  //    .then((response) => response.json())
-  //    .then((data) => {
-  //      setProgress(data as Todo[]);
-  //    });
-  //}, [isLoading]);
-  //
-  //const refresh3 = React.useCallback(() => {
-  //  if (isLoading) return;
-  //  setIsLoading(true);
-  //  fetch('api/get/' + DONE)
-  //    .then((response) => response.json())
-  //    .then((data) => {
-  //      setDone(data as Todo[]);
-  //    })
-  //    .finally(() => setIsLoading(false));
-  //}, [isLoading]);
-
-  //const cols = React.useMemo(
-  //  () =>
-  //    columnsDefinition.reduce((acc, name) => {
-  //      acc[name] = prepareColumn(todos, name);
-  //      return acc;
-  //    }, {} as { [key: string]: Todo[] }),
-  //  [todos]
-  //);
+        setDoneCol(data as Todo[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, [isLoading]);
 
   const onDragEnd = (result: DropResult) => {
     const dst = result.destination;
@@ -83,31 +60,43 @@ export default function MainRender() {
     if (!dst) {
       return;
     }
+    if (src.droppableId === dst.droppableId) {
+      //updateDroppable(src.droppableId)
+      //  console.log(src.droppableId);
+      //const currentTodo = todos?.[src.droppableId as keyof typeof todos];
+      //const currentColProgress = todoCol?.[src.droppableId as keyof typeof progressCol];
+      //const currentColDone = todoCol?.[src.droppableId as keyof typeof doneCol];
 
-    //if (src.droppableId === dst.droppableId) {
-    //  console.log(src.droppableId);
-    //  const currentCol = cols?.[src.droppableId as keyof typeof cols];
-    //  if (currentCol == null) {
-    //    return;
-    //  }
-    //  const dstObj = currentCol[dst.index];
-    //  const srcObj = currentCol[src.index];
-    //
-    //  onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.nextId);
-    //  onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.nextId);
-    //} else {
-    //  const srcObj = cols?.[src.droppableId as keyof typeof cols]?.[src.index];
-    //  onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
-    //}
+      const dstObj = todos[dst.index];
+      const srcObj = todos[src.index];
+
+      updateDroppable(dstObj.id, srcObj.id, dstObj.columnName);
+      //  if (currentCol == null) {
+      //    return;
+      //  }
+      //  const dstObj = currentCol[dst.index];
+      //  const srcObj = currentCol[src.index];
+      //
+      //  onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.nextId);
+      //  onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.nextId);
+      //} else {
+      //  const srcObj = cols?.[src.droppableId as keyof typeof cols]?.[src.index];
+      //  onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
+    }
   };
 
   useEffect(() => {
     refresh();
-    //refresh2();
-    //refresh3();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const updateDroppable = (srcId: number, dstId: number, srcColname: string) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    };
+    fetch('api/save/' + srcId + '/' + dstId + '/' + srcColname, requestOptions).then((response) => response.json());
+  };
 
   const save = () => {
     if (todoItem !== undefined && todoItem.trim().length !== 0) {
