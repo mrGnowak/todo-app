@@ -12,51 +12,51 @@ import org.springframework.stereotype.Component;
 import com.proj.todoapp.model.TodoItem;
 import com.proj.todoapp.repository.TodoRepo;
 
-import jakarta.annotation.PostConstruct;
-
 @Component
 public class LinkedList {
 
     @Autowired
     TodoRepo todoRepo;
 
-    @PostConstruct
-    public void filtr() {
-        Long dstId = 3l;
-        Long srcId = 4l;
-        String dstColName = "done";
-
-        updateDroppable(dstId, srcId, dstColName);
-    }
-
     public void updateDroppable(Long dstId, Long srcId, String dstColName) {
 
-        TodoItem temp = new TodoItem();
+        if (dstId == null) {
+            dstId = -1l;
+        }
+        TodoItem srcPervItem = new TodoItem();
+        TodoItem droppedItem = new TodoItem();
+        TodoItem dstPervitem = new TodoItem();
 
-        Long nextId = todoRepo.findById(srcId).get().getNextId(); // znajdz next Id do updateu
-        System.out.println("kolumna do update: " + todoRepo.findById(srcId));
-        temp = todoRepo.findByNextId(srcId); // temp- obiekt do zaktualizowania, ustaw nextID z zabieranego elementu
-        System.out.println("obiekt do zaktualizowania, ustaw nextID z zabieranego elementu " + temp);
+        // ---------POP-------
 
-        Long temp2 = temp.getId();
-        todoRepo.setNextId(nextId, temp2);
-        // operacia pop wykonana.
+        try {
+            srcPervItem = todoRepo.findByNextId(srcId);
+            srcPervItem.setNextId(todoRepo.findById(srcId).get().getNextId());
+            todoRepo.save(srcPervItem);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
         // ------------PUT--------------
-        todoRepo.findById(dstId);
-        System.out.println(todoRepo.findById(dstId));
 
-        System.out.println(todoRepo.findById(srcId).get().getColumnName()); // zmieniam na dstColName
-        todoRepo.findById(srcId).get().setColumnName(dstColName); // zmieniam na dstColName
-        System.out.println(todoRepo.findById(srcId).get().getColumnName()); // zmieniam na dstColName
-        todoRepo.setColumnName(dstColName, srcId);
-        System.out.println(todoRepo.findById(srcId).get().getNextId()); // src ID -nextId zamiana na nowe nextId
-        todoRepo.findById(srcId).get().setNextId(dstId); // src ID -nextId zamiana na nowe nextId
-        todoRepo.setNextId(dstId, srcId); // src ID -nextId zamiana na nowe nextId
-
-        System.out.println(todoRepo.findById(srcId).get().getNextId());
-
-        System.out.println("koniec");
-
+        droppedItem = todoRepo.findById(srcId).get();
+        try {
+            if (dstId == -1l) { // nie wiem co w przypadku, jak upuści się w przestrzeń na droppable area, jaka
+                                // wartość będzie zwraana - do rozważenia
+                droppedItem.setColumnName(dstColName);
+                droppedItem.setNextId(-1l);
+                todoRepo.save(droppedItem);
+            } else {
+                droppedItem.setColumnName(dstColName);
+                droppedItem.setNextId(todoRepo.findById(dstId).get().getId());
+                dstPervitem = todoRepo.findByNextIdAndColumnName(dstId, dstColName);
+                dstPervitem.setNextId(srcId);
+                todoRepo.save(dstPervitem);
+                todoRepo.save(droppedItem);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public List<TodoItem> createArray(String colName) {
@@ -75,7 +75,7 @@ public class LinkedList {
             }
         }
         try {
-            Long temp = dictionary.get(null);
+            Long temp = dictionary.get(-1l);
             for (int i = 0; i < todoItems.size(); i++) {
                 newTodoItems.add(i, todoRepo.findById(temp).get());
                 temp = dictionary.get(temp);

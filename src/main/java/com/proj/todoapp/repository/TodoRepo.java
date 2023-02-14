@@ -9,20 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.proj.todoapp.model.TodoItem;
 
+import jakarta.annotation.Nullable;
+
 public interface TodoRepo extends JpaRepository<TodoItem, Long> {
 
     List<TodoItem> findByColumnName(String columnName);
 
     TodoItem findByNextId(Long nextId);
 
+    @Nullable
+    TodoItem findByNextIdAndColumnName(Long nextId, String columnName);
+
     TodoItem findByIdAndColumnName(Long id, String columnName);
-
-    @Modifying
-    @Query("update TodoItem t set t.nextId = ?1 where t.id = ?2")
-    void setNextId(Long nextId, Long id);
-
-    @Modifying
-    @Query("update TodoItem t set t.columnName = ?1 where t.id = ?2")
-    void setColumnName(String columnName, Long id);
 
 }

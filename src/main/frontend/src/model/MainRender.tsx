@@ -53,43 +53,6 @@ export default function MainRender() {
       .finally(() => setIsLoading(false));
   }, [isLoading]);
 
-  const onDragEnd = (result: DropResult) => {
-    const dst = result.destination;
-    const src = result.source;
-
-    if (!dst) {
-      return;
-    }
-    if (src.droppableId === dst.droppableId) {
-      //updateDroppable(src.droppableId)
-      //  console.log(src.droppableId);
-      //const currentTodo = todos?.[src.droppableId as keyof typeof todos];
-      //const currentColProgress = todoCol?.[src.droppableId as keyof typeof progressCol];
-      //const currentColDone = todoCol?.[src.droppableId as keyof typeof doneCol];
-
-      const dstObj = todos[dst.index];
-      const srcObj = todos[src.index];
-
-      updateDroppable(dstObj.id, srcObj.id, dstObj.columnName);
-      //  if (currentCol == null) {
-      //    return;
-      //  }
-      //  const dstObj = currentCol[dst.index];
-      //  const srcObj = currentCol[src.index];
-      //
-      //  onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.nextId);
-      //  onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.nextId);
-      //} else {
-      //  const srcObj = cols?.[src.droppableId as keyof typeof cols]?.[src.index];
-      //  onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
-    }
-  };
-
-  useEffect(() => {
-    refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const updateDroppable = (srcId: number, dstId: number, srcColname: string) => {
     const requestOptions = {
       method: 'POST',
@@ -98,12 +61,49 @@ export default function MainRender() {
     fetch('api/save/' + srcId + '/' + dstId + '/' + srcColname, requestOptions).then((response) => response.json());
   };
 
+  const onDragEnd = (result: DropResult) => {
+    const dst = result.destination;
+    const src = result.source;
+
+    if (!dst) {
+      return;
+    }
+    //if (src.droppableId === dst.droppableId) {
+    //updateDroppable(src.droppableId)
+    //  console.log(src.droppableId);
+    //const currentTodo = todos?.[src.droppableId as keyof typeof todos];
+    //const currentColProgress = todoCol?.[src.droppableId as keyof typeof progressCol];
+    //const currentColDone = todoCol?.[src.droppableId as keyof typeof doneCol];
+
+    const dstObj = todos[dst.index];
+    const srcObj = todos[src.index];
+
+    updateDroppable(dstObj.id, srcObj.id, dstObj.columnName);
+    //  if (currentCol == null) {
+    //    return;
+    //  }
+    //  const dstObj = currentCol[dst.index];
+    //  const srcObj = currentCol[src.index];
+    //
+    //  onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.nextId);
+    //  onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.nextId);
+    //} else {
+    //  const srcObj = cols?.[src.droppableId as keyof typeof cols]?.[src.index];
+    //  onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
+    //}
+  };
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const save = () => {
     if (todoItem !== undefined && todoItem.trim().length !== 0) {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todoCol[0].id }),
+        body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todoCol[0].id }), //jeśli nie ma todoCol[0].id to wstaw -1
       };
       fetch('api/save', requestOptions)
         .then((response) => response.json())
