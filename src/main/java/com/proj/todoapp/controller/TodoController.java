@@ -38,6 +38,11 @@ public class TodoController {
         return todoRepo.findAll();
     }
 
+    // @GetMapping(value = "/get1")
+    // public void runner() {
+    // linkedList.updateDroppable(null, 3l, "progress");
+    // }
+
     @GetMapping(value = "/get/{colName}")
     public List<TodoItem> findForCols(@PathVariable String colName) {
         return linkedList.createArray(colName);
@@ -54,7 +59,7 @@ public class TodoController {
     }
 
     @PostMapping(value = "/save/{dstId}/{srcId}/{dstColName}", consumes = { "*/*" })
-    public void updateDroppable(@PathVariable Long dstId, Long srcId, String dstColName) {
+    public void updateDroppable(@PathVariable Long dstId, @PathVariable Long srcId, @PathVariable String dstColName) {
         linkedList.updateDroppable(dstId, srcId, dstColName);
     }
 
