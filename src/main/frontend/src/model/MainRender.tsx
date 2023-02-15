@@ -10,15 +10,14 @@ const TODO = 'to-do';
 const DONE = 'done';
 const PROGRESS = 'progress';
 
-function prepareColumn(todos: Todo[], colName: string) {
-  return todos.filter((todo) => todo.columnName === colName);
-}
+//function prepareColumn(todos: Todo[], colName: string) {
+//  return todos.filter((todo) => todo.columnName === colName);
+//}
 
-const columnsDefinition = [TODO, DONE, PROGRESS];
+//const columnsDefinition = [TODO, DONE, PROGRESS];
 
 export default function MainRender() {
   const { Title } = Typography;
-  const [todos, setTodo] = useState<Todo[]>([]);
   const [todoCol, setTodoCol] = useState<Todo[]>([]);
   const [progressCol, setProgressCol] = useState<Todo[]>([]);
   const [doneCol, setDoneCol] = useState<Todo[]>([]);
@@ -30,11 +29,6 @@ export default function MainRender() {
   const refresh = React.useCallback(() => {
     if (isLoading) return;
     setIsLoading(true);
-    fetch('api/get')
-      .then((response) => response.json())
-      .then((data) => {
-        setTodo(data as Todo[]);
-      });
     fetch('api/get/' + TODO)
       .then((response) => response.json())
       .then((data) => {
@@ -55,42 +49,72 @@ export default function MainRender() {
 
   const updateDroppable = (srcId: number, dstId: number, srcColname: string) => {
     const requestOptions = {
-      method: 'POST',
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     };
-    fetch('api/save/' + srcId + '/' + dstId + '/' + srcColname, requestOptions).then((response) => response.json());
+    fetch('api/get/' + srcId + '/' + dstId + '/' + srcColname, requestOptions);
   };
 
   const onDragEnd = (result: DropResult) => {
     const dst = result.destination;
     const src = result.source;
 
-    if (!dst) {
+    if (!dst || src === dst) {
       return;
     }
-    //if (src.droppableId === dst.droppableId) {
-    //updateDroppable(src.droppableId)
-    //  console.log(src.droppableId);
-    //const currentTodo = todos?.[src.droppableId as keyof typeof todos];
-    //const currentColProgress = todoCol?.[src.droppableId as keyof typeof progressCol];
-    //const currentColDone = todoCol?.[src.droppableId as keyof typeof doneCol];
+    let dstId = 0;
+    let srcId = 0;
 
-    const dstObj = todos[dst.index];
-    const srcObj = todos[src.index];
+    let srcObj: Todo;
+    let dstObj: Todo | undefined;
 
-    updateDroppable(dstObj.id, srcObj.id, dstObj.columnName);
-    //  if (currentCol == null) {
-    //    return;
-    //  }
-    //  const dstObj = currentCol[dst.index];
-    //  const srcObj = currentCol[src.index];
-    //
-    //  onUpdate(dstObj.id, dstObj.title, dstObj.columnName, srcObj.nextId);
-    //  onUpdate(srcObj.id, srcObj.title, srcObj.columnName, dstObj.nextId);
-    //} else {
-    //  const srcObj = cols?.[src.droppableId as keyof typeof cols]?.[src.index];
-    //  onUpdate(srcObj.id, srcObj.title, dst.droppableId, dst.index);
-    //}
+    if (src.droppableId === TODO) {
+      srcObj = todoCol[src.index];
+      console.log(srcObj.id);
+      srcId = srcObj.id;
+    }
+    if (src.droppableId === PROGRESS) {
+      srcObj = progressCol[src.index];
+      console.log(srcObj.id);
+      srcId = srcObj.id;
+    }
+    if (src.droppableId === DONE) {
+      srcObj = doneCol[src.index];
+      console.log(srcObj.id);
+      srcId = srcObj.id;
+    }
+    if (dst.droppableId === TODO) {
+      dstObj = todoCol[dst.index];
+      if (dstObj !== undefined) {
+        console.log(dstObj.id);
+        dstId = dstObj.id;
+      } else {
+        console.log(-1);
+        dstId = -1;
+      }
+    }
+    if (dst.droppableId === PROGRESS) {
+      dstObj = progressCol[dst.index];
+      if (dstObj !== undefined) {
+        console.log(dstObj.id);
+        dstId = dstObj.id;
+      } else {
+        console.log(-1);
+        dstId = -1;
+      }
+    }
+    if (dst.droppableId === DONE) {
+      dstObj = doneCol[dst.index];
+      if (dstObj !== undefined) {
+        console.log(dstObj.id);
+        dstId = dstObj.id;
+      } else {
+        console.log(-1);
+        dstId = -1;
+      }
+    }
+    updateDroppable(dstId, srcId, dst.droppableId);
+    refresh();
   };
 
   useEffect(() => {
@@ -103,7 +127,7 @@ export default function MainRender() {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todoCol[0].id }), //jeśli nie ma todoCol[0].id to wstaw -1
+        body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todoCol[0].id || -1 }), //jeśli nie ma todoCol[0].id to wstaw -1
       };
       fetch('api/save', requestOptions)
         .then((response) => response.json())

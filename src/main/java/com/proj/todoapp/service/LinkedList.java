@@ -23,6 +23,7 @@ public class LinkedList {
         if (dstId == null) {
             dstId = -1l;
         }
+
         TodoItem srcPervItem = new TodoItem();
         TodoItem droppedItem = new TodoItem();
         TodoItem dstPervitem = new TodoItem();
@@ -31,8 +32,11 @@ public class LinkedList {
 
         try {
             srcPervItem = todoRepo.findByNextId(srcId);
-            srcPervItem.setNextId(todoRepo.findById(srcId).get().getNextId());
-            todoRepo.save(srcPervItem);
+            if (srcPervItem == null) { // if there is no exist previous item, that was taken
+            } else {
+                srcPervItem.setNextId(todoRepo.findById(srcId).get().getNextId());
+                todoRepo.save(srcPervItem);
+            }
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -41,17 +45,29 @@ public class LinkedList {
 
         droppedItem = todoRepo.findById(srcId).get();
         try {
-            if (dstId == -1l) { // nie wiem co w przypadku, jak upuści się w przestrzeń na droppable area, jaka
-                                // wartość będzie zwraana - do rozważenia
+            if (dstId.equals(-1l) && todoRepo.findByColumnName(dstColName).isEmpty()) {
+                // if the drop column is empty
                 droppedItem.setColumnName(dstColName);
                 droppedItem.setNextId(-1l);
                 todoRepo.save(droppedItem);
-            } else {
+            } else if (dstId.equals(-1l) && !todoRepo.findByColumnName(dstColName).isEmpty()) {
+                // if the drop column isn't empty, but put item on the end
+                TodoItem dstPervItem2 = new TodoItem();
+                dstPervItem2 = todoRepo.findByNextIdAndColumnName(-1l, dstColName);
+                dstPervItem2.setNextId(srcId);
+                todoRepo.save(dstPervItem2);
+                droppedItem.setColumnName(dstColName);
+                droppedItem.setNextId(-1l);
+                todoRepo.save(droppedItem);
+            } else { // if it's normal column with items
                 droppedItem.setColumnName(dstColName);
                 droppedItem.setNextId(todoRepo.findById(dstId).get().getId());
                 dstPervitem = todoRepo.findByNextIdAndColumnName(dstId, dstColName);
-                dstPervitem.setNextId(srcId);
-                todoRepo.save(dstPervitem);
+                if (dstPervitem == null) { // if put item to the begin of column
+                } else {
+                    dstPervitem.setNextId(srcId);
+                    todoRepo.save(dstPervitem);
+                }
                 todoRepo.save(droppedItem);
             }
         } catch (Exception e) {

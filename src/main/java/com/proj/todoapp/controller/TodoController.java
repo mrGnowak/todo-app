@@ -58,7 +58,7 @@ public class TodoController {
         return todoRepo.save(todoItem);
     }
 
-    @PostMapping(value = "/save/{dstId}/{srcId}/{dstColName}", consumes = { "*/*" })
+    @GetMapping(value = "/get/{dstId}/{srcId}/{dstColName}", consumes = { "*/*" })
     public void updateDroppable(@PathVariable Long dstId, @PathVariable Long srcId, @PathVariable String dstColName) {
         linkedList.updateDroppable(dstId, srcId, dstColName);
     }
