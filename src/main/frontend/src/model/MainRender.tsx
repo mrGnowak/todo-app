@@ -52,7 +52,9 @@ export default function MainRender() {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     };
-    fetch('api/get/' + srcId + '/' + dstId + '/' + srcColname, requestOptions);
+    fetch('api/get/' + srcId + '/' + dstId + '/' + srcColname, requestOptions)
+      .then((response) => response.json())
+      .finally(() => refresh());
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -114,7 +116,7 @@ export default function MainRender() {
       }
     }
     updateDroppable(dstId, srcId, dst.droppableId);
-    refresh();
+    //refresh();
   };
 
   useEffect(() => {

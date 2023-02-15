@@ -59,8 +59,9 @@ public class TodoController {
     }
 
     @GetMapping(value = "/get/{dstId}/{srcId}/{dstColName}", consumes = { "*/*" })
-    public void updateDroppable(@PathVariable Long dstId, @PathVariable Long srcId, @PathVariable String dstColName) {
+    public String updateDroppable(@PathVariable Long dstId, @PathVariable Long srcId, @PathVariable String dstColName) {
         linkedList.updateDroppable(dstId, srcId, dstColName);
+        return "end";
     }
 
     @DeleteMapping(value = "/remove/{id}")
