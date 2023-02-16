@@ -20,16 +20,17 @@ public class LinkedList {
 
     public void updateDroppable(Long dstId, Long srcId, String dstColName) {
 
-        if (dstId == null) {
-            dstId = -1l;
-        }
-
         TodoItem srcPervItem = new TodoItem();
-        TodoItem droppedItem = new TodoItem();
-        TodoItem dstPervitem = new TodoItem();
+        TodoItem srcItem = new TodoItem();
+        TodoItem dstPervItem = new TodoItem();
+        TodoItem dstItem = new TodoItem();
+        TodoItem dstSecPervItem = new TodoItem();
 
         // ---------POP-------
 
+        if (dstId.equals(srcId)) {
+            return;
+        }
         try {
             srcPervItem = todoRepo.findByNextId(srcId);
             if (srcPervItem == null) { // if there is no exist previous item, that was taken
@@ -43,32 +44,49 @@ public class LinkedList {
 
         // ------------PUT--------------
 
-        droppedItem = todoRepo.findById(srcId).get();
+        srcItem = todoRepo.findById(srcId).get();
         try {
             if (dstId.equals(-1l) && todoRepo.findByColumnName(dstColName).isEmpty()) {
                 // if the drop column is empty
-                droppedItem.setColumnName(dstColName);
-                droppedItem.setNextId(-1l);
-                todoRepo.save(droppedItem);
+                srcItem.setColumnName(dstColName);
+                srcItem.setNextId(-1l);
+                todoRepo.save(srcItem);
             } else if (dstId.equals(-1l) && !todoRepo.findByColumnName(dstColName).isEmpty()) {
                 // if the drop column isn't empty, but put item on the end
-                TodoItem dstPervItem2 = new TodoItem();
-                dstPervItem2 = todoRepo.findByNextIdAndColumnName(-1l, dstColName);
-                dstPervItem2.setNextId(srcId);
-                todoRepo.save(dstPervItem2);
-                droppedItem.setColumnName(dstColName);
-                droppedItem.setNextId(-1l);
-                todoRepo.save(droppedItem);
-            } else { // if it's normal column with items
-                droppedItem.setColumnName(dstColName);
-                droppedItem.setNextId(todoRepo.findById(dstId).get().getId());
-                dstPervitem = todoRepo.findByNextIdAndColumnName(dstId, dstColName);
-                if (dstPervitem == null) { // if put item to the begin of column
+                dstPervItem = todoRepo.findByNextIdAndColumnName(-1l, dstColName);
+                dstPervItem.setNextId(srcId);
+                todoRepo.save(dstPervItem);
+                srcItem.setColumnName(dstColName);
+                srcItem.setNextId(-1l);
+                todoRepo.save(srcItem);
+            } else if (todoRepo.findById(srcId).get().getNextId().equals(dstId)
+                    && dstColName.equals(todoRepo.findById(srcId).get().getColumnName())) {
+                // if you move the item one position down
+                if (todoRepo.findById(dstId).get().getNextId().equals(-1l)) { // if put item to the begin of column
+                    srcItem.setNextId(-1l);
                 } else {
-                    dstPervitem.setNextId(srcId);
-                    todoRepo.save(dstPervitem);
+                    srcItem.setNextId(todoRepo.findById(dstId).get().getNextId());
                 }
-                todoRepo.save(droppedItem);
+                dstItem = todoRepo.findById(dstId).get();
+                dstItem.setNextId(srcId);
+                dstSecPervItem = todoRepo.findByNextIdAndColumnName(srcId, dstColName);
+                if (dstSecPervItem == null) { // check if there is a secondary previous element
+                } else { // if it is, set next id of this item.
+                    dstSecPervItem.setNextId(dstId);
+                    todoRepo.save(dstSecPervItem);
+                }
+                todoRepo.save(dstItem);
+                todoRepo.save(srcItem);
+            } else { // if it's normal column with items
+                srcItem.setColumnName(dstColName);
+                srcItem.setNextId(todoRepo.findById(dstId).get().getId());
+                dstPervItem = todoRepo.findByNextIdAndColumnName(dstId, dstColName);
+                if (dstPervItem == null) { // if put item to the begin of column
+                } else {
+                    dstPervItem.setNextId(srcId);
+                    todoRepo.save(dstPervItem);
+                }
+                todoRepo.save(srcItem);
             }
         } catch (Exception e) {
             System.out.println(e);

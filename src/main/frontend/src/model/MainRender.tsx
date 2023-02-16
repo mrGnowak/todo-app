@@ -115,6 +115,9 @@ export default function MainRender() {
         dstId = -1;
       }
     }
+    if (dstId === srcId) {
+      return;
+    }
     updateDroppable(dstId, srcId, dst.droppableId);
     //refresh();
   };
@@ -129,7 +132,7 @@ export default function MainRender() {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todoCol[0].id || -1 }), //jeśli nie ma todoCol[0].id to wstaw -1
+        body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todoCol[0]?.id ?? -1 }),
       };
       fetch('api/save', requestOptions)
         .then((response) => response.json())
