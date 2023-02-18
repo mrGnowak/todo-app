@@ -38,11 +38,6 @@ public class TodoController {
         return todoRepo.findAll();
     }
 
-    // @GetMapping(value = "/get1")
-    // public void runner() {
-    // linkedList.updateDroppable(null, 3l, "progress");
-    // }
-
     @GetMapping(value = "/get/{colName}")
     public List<TodoItem> findForCols(@PathVariable String colName) {
         return linkedList.createArray(colName);
