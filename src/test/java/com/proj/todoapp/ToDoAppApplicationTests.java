@@ -39,7 +39,7 @@ class ToDoAppApplicationTests {
 		todoRepo.save(item2);
 		todoRepo.flush();
 
-		assertEquals("A1", todoRepo.findById(1L).get().getTitle());
+		assertEquals(todoRepo.findById(1L).get().getTitle(), "A1");
 	}
 
 	@Test
