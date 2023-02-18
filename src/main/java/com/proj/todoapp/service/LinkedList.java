@@ -19,21 +19,27 @@ public class LinkedList {
     TodoRepo todoRepo;
 
     public void updateDroppable(Long dstId, Long srcId, String dstColName) {
-
-        TodoItem srcPervItem = new TodoItem();
-        TodoItem srcItem = new TodoItem();
-        TodoItem dstPervItem = new TodoItem();
-        TodoItem dstItem = new TodoItem();
-        TodoItem dstSecPervItem = new TodoItem();
-
-        // ---------POP-------
-
         if (dstId.equals(srcId)) {
             return;
         }
+        popItemFcn(srcId);
+        putItemFcn(dstId, srcId, dstColName);
+    }
+
+    public void deleteitem(Long delId) {
+        popItemFcn(delId);
+        todoRepo.deleteById(delId);
+    }
+
+    public void popItemFcn(Long srcId) {
+        // ---------POP-------
+
+        TodoItem srcPervItem = new TodoItem();
+
         try {
             srcPervItem = todoRepo.findByNextId(srcId);
-            if (srcPervItem == null) { // if there is no exist previous item, that was taken
+            if (srcPervItem == null) {
+                return; // if there is no exist previous item, that was taken
             } else {
                 srcPervItem.setNextId(todoRepo.findById(srcId).get().getNextId());
                 todoRepo.save(srcPervItem);
@@ -41,9 +47,15 @@ public class LinkedList {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public void putItemFcn(Long dstId, Long srcId, String dstColName) {
 
         // ------------PUT--------------
-
+        TodoItem srcItem = new TodoItem();
+        TodoItem dstPervItem = new TodoItem();
+        TodoItem dstItem = new TodoItem();
+        TodoItem dstSecPervItem = new TodoItem();
         srcItem = todoRepo.findById(srcId).get();
         try {
             if (dstId.equals(-1l) && todoRepo.findByColumnName(dstColName).isEmpty()) {
