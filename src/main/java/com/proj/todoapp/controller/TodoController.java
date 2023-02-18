@@ -61,6 +61,6 @@ public class TodoController {
 
     @DeleteMapping(value = "/remove/{id}")
     public void remove(@PathVariable Long id) {
-        todoRepo.deleteById(id);
+        linkedList.deleteitem(id);
     }
 }
