@@ -10,12 +10,6 @@ const TODO = 'to-do';
 const DONE = 'done';
 const PROGRESS = 'progress';
 
-//function prepareColumn(todos: Todo[], colName: string) {
-//  return todos.filter((todo) => todo.columnName === colName);
-//}
-
-//const columnsDefinition = [TODO, DONE, PROGRESS];
-
 export default function MainRender() {
   const { Title } = Typography;
   const [todoCol, setTodoCol] = useState<Todo[]>([]);
@@ -72,46 +66,37 @@ export default function MainRender() {
 
     if (src.droppableId === TODO) {
       srcObj = todoCol[src.index];
-      console.log(srcObj.id);
       srcId = srcObj.id;
     }
     if (src.droppableId === PROGRESS) {
       srcObj = progressCol[src.index];
-      console.log(srcObj.id);
       srcId = srcObj.id;
     }
     if (src.droppableId === DONE) {
       srcObj = doneCol[src.index];
-      console.log(srcObj.id);
       srcId = srcObj.id;
     }
     if (dst.droppableId === TODO) {
       dstObj = todoCol[dst.index];
       if (dstObj !== undefined) {
-        console.log(dstObj.id);
         dstId = dstObj.id;
       } else {
-        console.log(-1);
         dstId = -1;
       }
     }
     if (dst.droppableId === PROGRESS) {
       dstObj = progressCol[dst.index];
       if (dstObj !== undefined) {
-        console.log(dstObj.id);
         dstId = dstObj.id;
       } else {
-        console.log(-1);
         dstId = -1;
       }
     }
     if (dst.droppableId === DONE) {
       dstObj = doneCol[dst.index];
       if (dstObj !== undefined) {
-        console.log(dstObj.id);
         dstId = dstObj.id;
       } else {
-        console.log(-1);
         dstId = -1;
       }
     }

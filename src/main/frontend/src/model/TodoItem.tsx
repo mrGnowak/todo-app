@@ -22,9 +22,7 @@ export default function TodoItem({ item, onRemove, onUpdate, index }: Props) {
       <div style={{ marginTop: '2px', marginBottom: '2px' }}>
         <Row wrap={false}>
           <Col flex="auto">
-            <div>
-              {item.title} #{item.nextId} index:{index}
-            </div>
+            <div>{item.title}</div>
           </Col>
           <Col flex="50px">
             <Button
