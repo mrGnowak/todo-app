@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.proj.todoapp.repository.TodoRepo;
@@ -31,6 +32,7 @@ class ToDoAppApplicationTests {
 	}
 
 	@Test
+	@DirtiesContext
 	void testRepoAdd() {
 		var item1 = new TodoItem(1L, "A1", "A", 2L);
 		var item2 = new TodoItem(2L, "A2", "A", null);
@@ -43,6 +45,7 @@ class ToDoAppApplicationTests {
 	}
 
 	@Test
+	@DirtiesContext
 	void testLinkedList_oneColumn() {
 		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
 		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
