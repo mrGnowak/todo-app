@@ -26,7 +26,7 @@ public class LinkedList {
         putItemFcn(dstId, srcId, dstColName);
     }
 
-    public void deleteitem(Long delId) {
+    public void deleteItem(Long delId) {
         popItemFcn(delId);
         todoRepo.deleteById(delId);
     }
@@ -39,7 +39,7 @@ public class LinkedList {
         try {
             srcPervItem = todoRepo.findByNextId(srcId);
             if (srcPervItem == null) {
-                return; // if there is no exist previous item, that was taken
+                // if there is no exist previous item, that was taken
             } else {
                 srcPervItem.setNextId(todoRepo.findById(srcId).get().getNextId());
                 todoRepo.save(srcPervItem);
