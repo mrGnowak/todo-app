@@ -87,7 +87,7 @@ class ToDoAppApplicationTests {
 
 	@Test
 	@DirtiesContext
-	void testLinkedList_oneColumn() {
+	void testLinkedList_oneColumn_srcIdIndex_smaller_dstIdIndex() {
 		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
 		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
 		todoRepo.save(new TodoItem(3L, "A3", "A", 4L));
@@ -97,18 +97,43 @@ class ToDoAppApplicationTests {
 
 		// initial condition
 		// 1 -> 2 -> 3 -> 4 -> 5
-		linkedList.updateDroppable(3L, 4L, "A");
+		linkedList.updateDroppable(4L, 2L, "A");
+		todoRepo.flush();
+		System.out.println(todoRepo.findAll());
+
+		// expected order
+		// 1 -> 3 -> 4 -> 2 -> 5
+
+		assertNextId(1L, 3L);
+		assertNextId(2L, 5L);
+		assertNextId(3L, 4L);
+		assertNextId(4L, 2L);
+		assertNextId(5L, -1l);
+	}
+
+	@Test
+	@DirtiesContext
+	void testLinkedList_oneColumn_srcIdIndex_greater_dstIdIndex() {
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
+		todoRepo.save(new TodoItem(3L, "A3", "A", 4L));
+		todoRepo.save(new TodoItem(4L, "A4", "A", 5L));
+		todoRepo.save(new TodoItem(5L, "A5", "A", -1L));
+		todoRepo.flush();
+
+		// initial condition
+		// 1 -> 2 -> 3 -> 4 -> 5
+		linkedList.updateDroppable(2L, 4L, "A");
 		todoRepo.flush();
 		System.out.println(todoRepo.findAll());
 
 		// expected order
 		// 1 -> 4 -> 2 -> 3 -> 5
 
-		// TODO this line produces assertion error - CHECK
-		assertNextId(1L, 2L);
-		// assertNextId(2L, 4L);
+		assertNextId(1L, 4L);
+		assertNextId(2L, 3L);
 		assertNextId(3L, 5L);
-		assertNextId(4L, 3L);
+		assertNextId(4L, 2L);
 		assertNextId(5L, -1l);
 	}
 
@@ -170,12 +195,12 @@ class ToDoAppApplicationTests {
 		todoRepo.flush();
 		// expected order
 		// A: 2
-		// B: 3 -> 1 -> 4
+		// B: 1 -> 3 -> 4
 		// C: 5 -> 6
 
-		assertNextId(1L, 4L);
+		assertNextId(1L, 3L);
 		assertNextId(2L, -1L);
-		assertNextId(3L, 1L);
+		assertNextId(3L, 4L);
 		assertNextId(4L, -1L);
 		assertNextId(5L, 6L);
 		assertNextId(6L, -1L);
