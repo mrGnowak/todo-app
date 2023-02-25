@@ -10,10 +10,9 @@ type Props = {
   onRemove: (todoId: number) => void;
   onUpdate: (todoId: number, title: string, itemColumnName: string, nextId: number) => void;
   item: Todo;
-  index: number;
 };
 
-export default function TodoItem({ item, onRemove, onUpdate, index }: Props) {
+export default function TodoItem({ item, onRemove, onUpdate }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>('');
   const onChange = (e: React.FormEvent<HTMLInputElement>) => setEditedTitle(e.currentTarget.value);
