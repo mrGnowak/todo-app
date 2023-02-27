@@ -41,12 +41,12 @@ export default function MainRender() {
       .finally(() => setIsLoading(false));
   }, [isLoading]);
 
-  const updateDroppable = (srcId: number, dstId: number, srcColname: string) => {
+  const updateDroppable = (srcId: number, dstId: number, dstColName: string) => {
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     };
-    fetch('api/get/' + srcId + '/' + dstId + '/' + srcColname, requestOptions)
+    fetch('api/get/' + srcId + '/' + dstId + '/' + dstColName, requestOptions)
       .then((response) => response.json())
       .finally(() => refresh());
   };
@@ -55,55 +55,37 @@ export default function MainRender() {
     const dst = result.destination;
     const src = result.source;
 
-    if (!dst || src === dst) {
+    const dstColName = dst?.droppableId;
+
+    if (!dstColName || !dst || dst?.index == null || src === dst) {
       return;
     }
-    let dstId = 0;
-    let srcId = 0;
 
-    let srcObj: Todo;
-    let dstObj: Todo | undefined;
+    function getCol(colName: string) {
+      switch (colName) {
+        case 'to-do':
+          return todoCol;
+        case 'progress':
+          return progressCol;
+        case 'done':
+          return doneCol;
+      }
+      return undefined;
+    }
 
-    if (src.droppableId === TODO) {
-      srcObj = todoCol[src.index];
-      srcId = srcObj.id;
-    }
-    if (src.droppableId === PROGRESS) {
-      srcObj = progressCol[src.index];
-      srcId = srcObj.id;
-    }
-    if (src.droppableId === DONE) {
-      srcObj = doneCol[src.index];
-      srcId = srcObj.id;
-    }
-    if (dst.droppableId === TODO) {
-      dstObj = todoCol[dst.index];
-      if (dstObj !== undefined) {
-        dstId = dstObj.id;
-      } else {
-        dstId = -1;
-      }
-    }
-    if (dst.droppableId === PROGRESS) {
-      dstObj = progressCol[dst.index];
-      if (dstObj !== undefined) {
-        dstId = dstObj.id;
-      } else {
-        dstId = -1;
-      }
-    }
-    if (dst.droppableId === DONE) {
-      dstObj = doneCol[dst.index];
-      if (dstObj !== undefined) {
-        dstId = dstObj.id;
-      } else {
-        dstId = -1;
-      }
-    }
-    if (dstId === srcId) {
+    const srcCol = getCol(src.droppableId);
+    const dstCol = getCol(dst.droppableId);
+
+    if (srcCol == null || dstCol == null) {
       return;
     }
-    updateDroppable(dstId, srcId, dst.droppableId);
+
+    const srcId = srcCol?.[src.index]?.id;
+
+    const reorderFromTop = dst?.droppableId === src?.droppableId && src.index < dst.index;
+    const dstId = dstCol?.[dst.index + (reorderFromTop ? 1 : 0)]?.id ?? -1;
+
+    updateDroppable(srcId, dstId, dstColName);
     //refresh();
   };
 
