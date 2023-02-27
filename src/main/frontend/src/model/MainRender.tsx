@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import '.././App.css';
+import '.././styles/App.css';
 import { Button, Col, Row, Typography, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
