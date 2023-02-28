@@ -22,7 +22,7 @@ import io.micrometer.common.lang.NonNull;
 import jakarta.validation.constraints.NotBlank;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/todoapp")
 public class TodoController {
 
     Logger logger = LoggerFactory.getLogger(TodoController.class);

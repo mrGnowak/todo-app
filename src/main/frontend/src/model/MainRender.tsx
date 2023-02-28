@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import '.././styles/App.css';
+import '.././styles/TodoApp.css';
 import { Button, Col, Row, Typography, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
@@ -23,17 +23,17 @@ export default function MainRender() {
   const refresh = React.useCallback(() => {
     if (isLoading) return;
     setIsLoading(true);
-    fetch('api/get/' + TODO)
+    fetch('api/todoapp/get/' + TODO)
       .then((response) => response.json())
       .then((data) => {
         setTodoCol(data as Todo[]);
       });
-    fetch('api/get/' + PROGRESS)
+    fetch('api/todoapp/get/' + PROGRESS)
       .then((response) => response.json())
       .then((data) => {
         setProgressCol(data as Todo[]);
       });
-    fetch('api/get/' + DONE)
+    fetch('api/todoapp/get/' + DONE)
       .then((response) => response.json())
       .then((data) => {
         setDoneCol(data as Todo[]);
@@ -46,7 +46,7 @@ export default function MainRender() {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     };
-    fetch('api/get/' + srcId + '/' + dstId + '/' + dstColname, requestOptions)
+    fetch('api/todoapp/get/' + srcId + '/' + dstId + '/' + dstColname, requestOptions)
       .then((response) => response.json())
       .finally(() => refresh());
   };
@@ -104,7 +104,7 @@ export default function MainRender() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todoCol[0]?.id ?? -1 }),
       };
-      fetch('api/save', requestOptions)
+      fetch('api/todoapp/save', requestOptions)
         .then((response) => response.json())
         .then(() => refresh())
         .then(() => setTodoItem(''));
@@ -113,7 +113,7 @@ export default function MainRender() {
 
   const onRemove = useCallback(
     (id: number) => {
-      fetch('api/remove/' + id, { method: 'DELETE' }).then(() => refresh());
+      fetch('api/todoapp/remove/' + id, { method: 'DELETE' }).then(() => refresh());
     },
     [refresh]
   );
@@ -121,7 +121,7 @@ export default function MainRender() {
   const onUpdate = useCallback(
     (itemId: number, itemTitle: string, itemColumnName: string, nextId: number) => {
       if (itemTitle !== undefined && itemTitle.trim().length !== 0) {
-        fetch('api/put', {
+        fetch('api/todoapp/put', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -139,7 +139,7 @@ export default function MainRender() {
   );
 
   return (
-    <>
+    <div className="todoapp">
       <Title>TO DO APP</Title>
       <Input
         style={{ maxWidth: 500, margin: '5px' }}
@@ -171,6 +171,6 @@ export default function MainRender() {
           </Col>
         </Row>
       </DragDropContext>
-    </>
+    </div>
   );
 }

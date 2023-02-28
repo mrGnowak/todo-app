@@ -1,8 +1,8 @@
 import React from 'react';
 import MainRender from '../model/MainRender';
 
-function App() {
+function TodoApp() {
   return <MainRender />;
 }
 
-export default App;
+export default TodoApp;
