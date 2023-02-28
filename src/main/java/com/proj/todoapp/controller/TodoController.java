@@ -53,9 +53,9 @@ public class TodoController {
         return todoRepo.save(todoItem);
     }
 
-    @GetMapping(value = "/get/{dstId}/{srcId}/{dstColName}", consumes = { "*/*" })
-    public String updateDroppable(@PathVariable Long dstId, @PathVariable Long srcId, @PathVariable String dstColName) {
-        linkedList.updateDroppable(dstId, srcId, dstColName);
+    @GetMapping(value = "/get/{srcId}/{dstId}/{dstColName}", consumes = { "*/*" })
+    public String updateDroppable(@PathVariable Long srcId, @PathVariable Long dstId, @PathVariable String dstColName) {
+        linkedList.updateDroppable(srcId, dstId, dstColName);
         return "end";
     }
 
