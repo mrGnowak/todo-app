@@ -1,34 +1,26 @@
 import React from 'react';
 import '.././styles/App.css';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Layout, theme } from 'antd';
+import NavBar from './NavBar';
 
 const { Header, Content, Footer } = Layout;
 
-const Home: React.FC = () => {
+function Home() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   return (
-    <Layout className="layout">
+    <>
       <Header>
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['2']}
-          items={new Array(15).fill(null).map((_, index) => {
-            const key = index + 1;
-            return {
-              key,
-              label: `nav ${key}`,
-            };
-          })}
-        />
+        <NavBar />
       </Header>
-      <Content style={{ padding: '0 50px' }}></Content>
-    </Layout>
+
+      <Content style={{ padding: '0 50px' }}>
+        <h1 style={{ color: 'white' }}>Strona Domowa</h1>
+      </Content>
+    </>
   );
-};
+}
 
 export default Home;

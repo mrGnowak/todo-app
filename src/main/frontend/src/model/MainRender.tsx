@@ -60,11 +60,6 @@ export default function MainRender() {
     if (!dst || src === dst || !dstColName || dst?.index == null) {
       return;
     }
-    //let dstId = 0;
-    //let srcId = 0;
-    //
-    //let srcObj: Todo;
-    //let dstObj: Todo | undefined;
 
     function getCol(colName: string) {
       switch (colName) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import ErrorPage from './error-page';
+import ErrorPage from './routes/error-page';
 import './styles/index.css';
 import TodoApp from './routes/TodoApp';
 import Home from './routes/Home';
