@@ -16,6 +16,16 @@
   -webkit-text-size-adjust: 100%;
 }
 
+body {
+  margin: 0;
+  flex-grow: 3;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: rgb(158, 158, 134);
+  /*background: linear-gradient(90deg, rgb(253, 252, 152) 0%, rgb(253, 252, 132) 50%, rgb(253, 252, 112) 100%);*/
+}
+
 a {
   font-weight: 500;
   color: #646cff;

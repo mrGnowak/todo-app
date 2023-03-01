@@ -15,11 +15,11 @@ const items: MenuProps['items'] = [
     icon: <SettingOutlined />,
   },
   {
-    label: 'Log in',
+    label: <a href="/login">Log in</a>,
     key: 'login',
   },
   {
-    label: 'Sign up',
+    label: <a href="/signup">Sign up</a>,
     key: 'signin',
   },
 ];
@@ -32,7 +32,7 @@ function NavBar() {
     setCurrent(e.key);
   };
 
-  return <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />;
+  return <Menu onClick={onClick} theme="dark" selectedKeys={[current]} mode="horizontal" items={items} />;
 }
 
 export default NavBar;

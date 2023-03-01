@@ -1,11 +1,12 @@
 import '.././styles/App.css';
 import { Layout } from 'antd';
 import NavBar from './NavBar';
-import HomePage from '../model_site/HomePage';
+import SignUpPage from '../model_site/SignUpPage';
+import LoginPage from '../model_site/LoginPage';
 
 const { Header, Content } = Layout;
 
-function Home() {
+function Login() {
   return (
     <>
       <Header>
@@ -13,10 +14,10 @@ function Home() {
       </Header>
 
       <Content style={{ padding: '0 50px' }}>
-        <HomePage />
+        <LoginPage />
       </Content>
     </>
   );
 }
 
-export default Home;
+export default Login;
