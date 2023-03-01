@@ -3,20 +3,20 @@ import Paragraph from 'antd/es/skeleton/Paragraph';
 import Title from 'antd/es/typography/Title';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
-interface IFormInput {
-  userName: string;
-  email: string;
-  password: string;
-  confPassword: number;
-}
+//interface IFormInput {
+//  userName: string;
+//  email: string;
+//  password: string;
+//  confPassword: number;
+//}
 
 export default function SignUpPage() {
-  const { register, handleSubmit } = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+  //const { register, handleSubmit } = useForm<IFormInput>();
+  //const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
 
-  //const onFinish = (values: any) => {
-  //  console.log('Success:', values);
-  //};
+  const onFinish = (values: any) => {
+    console.log('Success:', values);
+  };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -31,7 +31,7 @@ export default function SignUpPage() {
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
         initialValues={{ remember: true }}
-        onFinish={handleSubmit(onSubmit)}
+        onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
@@ -43,7 +43,7 @@ export default function SignUpPage() {
             { max: 20, message: 'Wrong username!' },
           ]}
         >
-          <Input {...register('userName')} />
+          <Input />
         </Form.Item>
         <Form.Item
           label="Email"
@@ -53,7 +53,7 @@ export default function SignUpPage() {
             { type: 'email', message: 'The input is not valid E-mail!' },
           ]}
         >
-          <Input {...register('email')} />
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -71,12 +71,12 @@ export default function SignUpPage() {
             {
               pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!#$%\-_=+<>])([a-zA-Z0-9!#$%\-_=+<>]+)$/,
               message:
-                'Wrong password! Password must contains: uppecrase letter, lovercase letter, any number 0 - 9, special characters: (~!@#$%^&*_-+=`|\\(){}[]:;"\'<>,.?/)',
+                'Wrong password! Password must contains: uppecrase letter, lovercase letter, any number 0 - 9, special characters: (!#$%\\-_=+<>)',
             },
           ]}
           hasFeedback
         >
-          <Input.Password {...register('password')} />
+          <Input.Password />
         </Form.Item>
 
         <Form.Item
@@ -99,7 +99,7 @@ export default function SignUpPage() {
             }),
           ]}
         >
-          <Input.Password {...register('confPassword')} />
+          <Input.Password />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
