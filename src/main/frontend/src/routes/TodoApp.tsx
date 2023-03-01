@@ -1,6 +1,5 @@
-import React from 'react';
-import { Layout, theme } from 'antd';
-import MainRender from '../model/MainRender';
+import { Layout } from 'antd';
+import MainRender from '../model_todoapp/MainRender';
 import NavBar from './NavBar';
 
 function TodoApp() {

@@ -1,15 +1,10 @@
-import React from 'react';
 import '.././styles/App.css';
-import { Layout, theme } from 'antd';
+import { Layout } from 'antd';
 import NavBar from './NavBar';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 function Home() {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
   return (
     <>
       <Header>

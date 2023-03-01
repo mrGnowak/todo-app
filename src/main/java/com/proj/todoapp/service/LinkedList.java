@@ -40,8 +40,8 @@ public class LinkedList {
             // if there is no exist previous item, that was taken
         } else {
             srcPrevItem.setNextId(todoRepo.findById(srcId).get().getNextId());
-            todoRepo.save(srcPrevItem);
         }
+        todoRepo.flush();
     }
 
     public void putItemBefore(Long srcId, Long dstId, String dstColName) {
@@ -55,11 +55,10 @@ public class LinkedList {
             var prevDstItem = todoRepo.findByNextIdAndColumnName(dstId, dstColName);
             if (prevDstItem != null) {
                 prevDstItem.setNextId(srcId);
-                todoRepo.save(prevDstItem);
             }
             srcItem.setNextId(dstId);
             srcItem.setColumnName(dstColName);
-            todoRepo.save(srcItem);
+            todoRepo.flush();
         } catch (Exception e) {
             System.out.println(e);
         }
