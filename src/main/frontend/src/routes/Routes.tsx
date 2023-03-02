@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './error-page';
 import Home from './Home';
-import Login from './LogIn';
+import Login from './Login';
 import SignUp from './SignUp';
 import TodoApp from './TodoApp';
 

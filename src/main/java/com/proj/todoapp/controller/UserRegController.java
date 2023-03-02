@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.proj.todoapp.model.Users;
-import com.proj.todoapp.repository.UsersRepo;
+import com.proj.todoapp.service.UserService;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.validation.constraints.NotBlank;
 
 @RestController
-@RequestMapping(value = "/api/sign")
+@RequestMapping(value = "/api/register")
 public class UserRegController {
 
     Logger logger = LoggerFactory.getLogger(UserRegController.class);
 
     @Autowired
-    private UsersRepo usersRepo;
+    UserService userService;
 
     @PostMapping(value = "/save", consumes = { "*/*" })
-    public Users save(@NonNull @NotBlank @RequestBody Users users) {
-        return usersRepo.save(users);
+    public Users register(@NonNull @NotBlank @RequestBody Users users) {
+        return userService.saveNewUser(users);
     }
 }

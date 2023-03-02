@@ -16,7 +16,7 @@ import com.proj.todoapp.repository.TodoRepo;
 public class LinkedList {
 
     @Autowired
-    TodoRepo todoRepo;
+    private TodoRepo todoRepo;
 
     public boolean updateDroppable(Long srcId, Long dstId, String dstColName) {
         if (dstId.equals(srcId)) {

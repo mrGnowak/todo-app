@@ -1,25 +1,29 @@
-import { Button, Checkbox, Form, Input } from 'antd';
-import Paragraph from 'antd/es/skeleton/Paragraph';
+import { Button, Form, Input } from 'antd';
 import Title from 'antd/es/typography/Title';
-import { useForm, SubmitHandler } from 'react-hook-form';
 
-//interface IFormInput {
-//  userName: string;
-//  email: string;
-//  password: string;
-//  confPassword: number;
-//}
+type SignInForm = {
+  userName: string;
+  email: string;
+  password: string;
+};
 
 export default function SignUpPage() {
-  //const { register, handleSubmit } = useForm<IFormInput>();
-  //const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
-
-  const onFinish = (values: any) => {
+  const onFinish = (values: SignInForm) => {
     console.log('Success:', values);
+    save(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
+  };
+
+  const save = (values: SignInForm) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userName: values.userName, email: values.email, password: values.password }),
+    };
+    fetch('api/register/save', requestOptions);
   };
 
   return (
@@ -37,10 +41,10 @@ export default function SignUpPage() {
       >
         <Form.Item
           label="Username"
-          name="username"
+          name="userName"
           rules={[
             { required: true, message: 'Please input your username!' },
-            { max: 20, message: 'Wrong username!' },
+            { max: 20, message: 'Username too long!' },
           ]}
         >
           <Input />
@@ -71,7 +75,7 @@ export default function SignUpPage() {
             {
               pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!#$%\-_=+<>])([a-zA-Z0-9!#$%\-_=+<>]+)$/,
               message:
-                'Wrong password! Password must contains: uppecrase letter, lovercase letter, any number 0 - 9, special characters: (!#$%\\-_=+<>)',
+                'Password must contains: uppecrase letter, lovercase letter, any number 0 - 9, special characters (!#$%\\-_=+<>)',
             },
           ]}
           hasFeedback
