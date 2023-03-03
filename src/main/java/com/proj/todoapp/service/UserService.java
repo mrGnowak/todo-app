@@ -22,4 +22,9 @@ public class UserService {
         return usersRepo.save(users);
     }
 
+    public boolean checkPasswordMatches(String password, String hashPassword) {
+        boolean isPasswordMatches = passwordEncoder.encoder().matches(password, hashPassword);
+        return isPasswordMatches;
+    }
+
 }
