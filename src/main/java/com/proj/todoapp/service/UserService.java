@@ -14,12 +14,38 @@ public class UserService {
     private UsersRepo usersRepo;
 
     @Autowired
-    PasswordEncoderConfig passwordEncoder;
+    private PasswordEncoderConfig passwordEncoder;
 
-    public Users saveNewUser(Users users) {
-        String hashPass = passwordEncoder.encoder().encode(users.getPassword());
-        users.setPassword(hashPass);
-        return usersRepo.save(users);
+    public String saveNewUser(Users user) {
+        if (checkUserExistUserName(user)) {
+            if (checkUserExistEmail(user)) {
+                String hashPass = passwordEncoder.encoder().encode(user.getPassword());
+                user.setPassword(hashPass);
+                usersRepo.save(user);
+                System.out.println("Created!");
+                return "Created";
+            } else {
+                System.out.println("This email is already in use!");
+                return "This email is already in use!";
+            }
+        } else {
+            System.out.println("UserName is occupied");
+            return "UserName is occupied!";
+        }
+    }
+
+    public Boolean checkUserExistEmail(Users user) {
+        if (usersRepo.findByEmail(user.getEmail()) == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean checkUserExistUserName(Users user) {
+        if (usersRepo.findByUserName(user.getUserName()) == null) {
+            return true;
+        }
+        return false;
     }
 
     public boolean checkPasswordMatches(String password, String hashPassword) {

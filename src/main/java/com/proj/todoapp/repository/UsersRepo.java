@@ -6,4 +6,7 @@ import com.proj.todoapp.model.Users;
 
 public interface UsersRepo extends JpaRepository<Users, Long> {
 
+    Users findByEmail(String email);
+
+    Users findByUserName(String userName);
 }

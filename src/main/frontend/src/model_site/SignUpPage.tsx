@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import Title from 'antd/es/typography/Title';
 
@@ -6,6 +7,7 @@ type SignInForm = {
   email: string;
   password: string;
 };
+
 
 export default function SignUpPage() {
   const onFinish = (values: SignInForm) => {
@@ -16,6 +18,7 @@ export default function SignUpPage() {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+  const [notification, setNotification] = useState<string | undefined>();
 
   const save = (values: SignInForm) => {
     const requestOptions = {
@@ -23,7 +26,11 @@ export default function SignUpPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userName: values.userName, email: values.email, password: values.password }),
     };
-    fetch('api/register/save', requestOptions);
+    fetch('api/register/save', requestOptions)
+      .then((response) => response.text())
+      .then((data) => {
+        setNotification(data);
+      });
   };
 
   return (
@@ -107,11 +114,12 @@ export default function SignUpPage() {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" >
             Submit
           </Button>
         </Form.Item>
       </Form>
+      {notification}
     </>
   );
 }
