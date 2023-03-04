@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, notification } from 'antd';
 import Title from 'antd/es/typography/Title';
+import { NotificationPlacement } from 'antd/es/notification/interface';
 
 type SignInForm = {
   userName: string;
@@ -8,17 +9,9 @@ type SignInForm = {
   password: string;
 };
 
-
 export default function SignUpPage() {
-  const onFinish = (values: SignInForm) => {
-    console.log('Success:', values);
-    save(values);
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-  const [notification, setNotification] = useState<string | undefined>();
+  //const [api, contextHolder] = notification.useNotification();
+  const [response, setResponse] = useState<string | undefined>();
 
   const save = (values: SignInForm) => {
     const requestOptions = {
@@ -29,8 +22,25 @@ export default function SignUpPage() {
     fetch('api/register/save', requestOptions)
       .then((response) => response.text())
       .then((data) => {
-        setNotification(data);
+        setResponse(data);
       });
+    //.then(() => openNotification('topLeft', response));
+  };
+
+  //const openNotification = (placement: NotificationPlacement, newResponse: string | undefined) => {
+  //  api.info({
+  //    message: 'Notification',
+  //    description: newResponse,
+  //    placement,
+  //  });
+  //};
+  const onFinish = (values: SignInForm) => {
+    console.log('Success:', values);
+    save(values);
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
   };
 
   return (
@@ -112,14 +122,28 @@ export default function SignUpPage() {
         >
           <Input.Password />
         </Form.Item>
-
+        <Form.Item
+          name="agreement"
+          valuePropName="checked"
+          wrapperCol={{ offset: 8, span: 16 }}
+          rules={[
+            {
+              validator: (_, value) =>
+                value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+            },
+          ]}
+        >
+          <Checkbox>
+            I have read the <a href="">agreement</a>
+          </Checkbox>
+        </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit" >
-            Submit
+          <Button type="primary" htmlType="submit">
+            Register
           </Button>
         </Form.Item>
+        <Form wrapperCol={{ offset: 8, span: 16 }}>{response}</Form>
       </Form>
-      {notification}
     </>
   );
 }
