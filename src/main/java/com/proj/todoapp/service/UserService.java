@@ -23,7 +23,7 @@ public class UserService {
                 user.setPassword(hashPass);
                 usersRepo.save(user);
                 System.out.println("Created!");
-                return "Created";
+                return "Created!";
             } else {
                 System.out.println("This email is already in use!");
                 return "This email is already in use!";
