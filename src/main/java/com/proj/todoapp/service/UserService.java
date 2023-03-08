@@ -53,4 +53,18 @@ public class UserService {
         return isPasswordMatches;
     }
 
+    public Long returnLoggedUserId(String email, String password) {
+        var user = usersRepo.findByEmail(email);
+        if (user == null) {
+            return null;
+        } else {
+            var checkPass = checkPasswordMatches(password, user.getPassword());
+            if (checkPass) {
+                return user.getId();
+            }
+        }
+        return null;
+
+    }
+
 }
