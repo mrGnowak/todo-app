@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.proj.todoapp.model.LoginUser;
+import com.proj.todoapp.security.UserDto;
 import com.proj.todoapp.service.UserService;
 
 @RestController
@@ -21,14 +22,30 @@ public class LoginController {
 
     @PostMapping(value = "/login", consumes = { "*/*" })
     public Long login(@RequestBody LoginUser loginUser) {
-
         try {
             var userId = userService.returnLoggedUserId(loginUser.getEmail(), loginUser.getPassword());
-            System.out.println(userId);
+            userService.startSession(userId);
             return userId;
             // zwraca id zalogowanego uzytkownika
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
+    }
+
+    @GetMapping("/getUser")
+    public UserDto getUser() {
+        var user = userService.getSessionUser();
+
+        if (user == null) {
+            return null;
+        }
+
+        return new UserDto() {
+            {
+                setId(user.getId());
+                setUserName(user.getUserName());
+                setEmail(user.getEmail());
+            }
+        };
     }
 }
