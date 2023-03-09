@@ -4,30 +4,41 @@ import Home from './Home';
 import Login from './Login';
 import SignUp from './SignUp';
 import TodoApp from './TodoApp';
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/todoapp',
-    element: <TodoApp />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/signup',
-    element: <SignUp />,
-    errorElement: <ErrorPage />,
-  },
-]);
+import React from 'react';
+import { useUser } from '../UserProvider';
 
 export default function Routes() {
+  const user = useUser();
+  console.log('🚀 ~ file: Routes.tsx:12 ~ Routes ~ user:', user);
+
+  const router = React.useMemo(() => {
+    return createBrowserRouter([
+      {
+        path: '/',
+        element: <Home />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: '/todoapp',
+        element: <TodoApp />,
+        errorElement: <ErrorPage />,
+      },
+      ...(user == null
+        ? [
+            {
+              path: '/login',
+              element: <Login />,
+              errorElement: <ErrorPage />,
+            },
+            {
+              path: '/signup',
+              element: <SignUp />,
+              errorElement: <ErrorPage />,
+            },
+          ]
+        : []),
+    ]);
+  }, [user]);
+
   return <RouterProvider router={router} />;
 }

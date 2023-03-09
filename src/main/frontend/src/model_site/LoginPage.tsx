@@ -1,19 +1,28 @@
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import Title from 'antd/es/typography/Title';
+import { useNavigate } from 'react-router-dom';
+import { useRefreshUser } from '../UserProvider';
 
 type LoginForm = {
   email: string;
   password: string;
 };
 export default function LoginPage() {
-  const onFinish = (values: LoginForm) => {
-    console.log('Success:', values);
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: values.email, password: values.password }),
-    };
-    fetch('api/login', requestOptions).then((response) => response.json());
+  const navigate = useNavigate();
+  const refreshUser = useRefreshUser();
+
+  const onFinish = async (values: LoginForm) => {
+    try {
+      await fetch('api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: values.email, password: values.password }),
+      });
+      navigate('/');
+      refreshUser();
+    } catch (e) {
+      console.log('Wrong pass', e);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
