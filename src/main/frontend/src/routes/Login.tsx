@@ -1,9 +1,7 @@
 import '.././styles/App.css';
 import { Layout } from 'antd';
 import NavBar from './NavBar';
-import SignUpPage from '../model_site/SignUpPage';
 import LoginPage from '../model_site/LoginPage';
-
 const { Header, Content } = Layout;
 
 function Login() {

@@ -4,22 +4,43 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-// @EnableWebSecurity
+@EnableWebSecurity
 public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    // @Bean
-    // SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception
-    // {
-    // return http
-    // .authorizeRequests(
-    //
-    // )
-    // .build();
+        http
+                .cors()
+                .disable()
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/api/todoapp/**").authenticated()
+                .requestMatchers("/todoapp").authenticated()
+                .requestMatchers("/**").permitAll()
+                .requestMatchers("/api/login/**").permitAll()
+                .anyRequest().permitAll()
+                // .and()
+                // .formLogin()
+                // .loginPage("/login")
+                // .loginProcessingUrl("/api/login")
+                // .defaultSuccessUrl("/homepage.html", true)
+                // .failureUrl("/login.html?error=true")
+                // .failureHandler(authenticationFailureHandler())
+                .and()
+                .logout()
+                .logoutUrl("/perform_logout")
+                .deleteCookies("JSESSIONID");
+        // .logoutSuccessHandler(logoutSuccessHandler());
 
-    // }
+        return http.build();
+    }
 
 }
