@@ -8,12 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.proj.todoapp.repository.TodoRepo;
 import com.proj.todoapp.repository.UsersRepo;
-import com.proj.todoapp.service.LinkedList;
 import com.proj.todoapp.service.UserService;
-import com.proj.todoapp.model.TodoItem;
-import com.proj.todoapp.model.Users;
+import com.proj.todoapp.model.AppUser;
 
 // import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,8 +34,8 @@ class RegisterTests {
 	@Test
 	@DirtiesContext
 	void testRepoAdd() {
-		var user1 = new Users(1L, "user1", "1234", "user1@user.com");
-		var user2 = new Users(2L, "user2", "1234", "user2@user.com");
+		var user1 = new AppUser(1L, "user1", "1234", "user1@user.com");
+		var user2 = new AppUser(2L, "user2", "1234", "user2@user.com");
 
 		userService.saveNewUser(user1);
 		userService.saveNewUser(user2);
@@ -50,7 +47,7 @@ class RegisterTests {
 
 		// check correct statement:
 		// except: Created!
-		var user3 = new Users(2L, "user3", "1234", "user3@user.com");
+		var user3 = new AppUser(2L, "user3", "1234", "user3@user.com");
 
 		assertEquals(userService.saveNewUser(user3), "Created!");
 	}
@@ -58,16 +55,16 @@ class RegisterTests {
 	@Test
 	@DirtiesContext
 	void testEmailOrUsernameExist() {
-		var user1 = new Users(1L, "user1", "1234", "user1@user.com");
-		var user2 = new Users(2L, "user2", "1234", "user2@user.com");
+		var user1 = new AppUser(1L, "user1", "1234", "user1@user.com");
+		var user2 = new AppUser(2L, "user2", "1234", "user2@user.com");
 
 		userService.saveNewUser(user1);
 		userService.saveNewUser(user2);
 		usersRepo.flush();
 
-		var userWrongUserName = new Users(1L, "user1", "1234", "user1234@user.com");
-		var userWrongEmail = new Users(1L, "user1234", "1234", "user1@user.com");
-		var userWrongBoth = new Users(2L, "user2", "1234", "user2@user.com");
+		var userWrongUserName = new AppUser(1L, "user1", "1234", "user1234@user.com");
+		var userWrongEmail = new AppUser(1L, "user1234", "1234", "user1@user.com");
+		var userWrongBoth = new AppUser(2L, "user2", "1234", "user2@user.com");
 
 		// if username exist returnes statement:
 		// UserName is occupied!

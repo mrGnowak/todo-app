@@ -36,7 +36,13 @@ export default function Routes() {
               errorElement: <ErrorPage />,
             },
           ]
-        : []),
+        : [
+            {
+              path: '/logout',
+              element: <SignUp />,
+              errorElement: <ErrorPage />,
+            },
+          ]),
     ]);
   }, [user]);
 

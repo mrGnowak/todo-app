@@ -31,7 +31,12 @@ function NavBar() {
               key: 'signin',
             },
           ]
-        : []),
+        : [
+            {
+              label: <a href="/logout">Logout</a>,
+              key: 'logout',
+            },
+          ]),
     ],
     [user]
   );

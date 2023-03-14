@@ -2,11 +2,11 @@ package com.proj.todoapp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.proj.todoapp.model.Users;
+import com.proj.todoapp.model.AppUser;
 
-public interface UsersRepo extends JpaRepository<Users, Long> {
+public interface UsersRepo extends JpaRepository<AppUser, Long> {
 
-    Users findByEmail(String email);
+    AppUser findByEmail(String email);
 
-    Users findByUserName(String userName);
+    AppUser findByUserName(String userName);
 }

@@ -2,15 +2,15 @@ package com.proj.todoapp.model;
 
 public class LoginUser {
 
-    private String email;
+    private String userName;
 
     private String password;
 
     public LoginUser() {
     }
 
-    public LoginUser(String email, String password) {
-        this.email = email;
+    public LoginUser(String userName, String password) {
+        this.userName = userName;
         this.password = password;
     }
 
@@ -22,11 +22,11 @@ public class LoginUser {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

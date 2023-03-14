@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Users {
+public class AppUser {
 
     @Id
     @GeneratedValue
@@ -20,10 +20,10 @@ public class Users {
     @Column
     private String email;
 
-    public Users() {
+    public AppUser() {
     }
 
-    public Users(Long id, String userName, String password, String email) {
+    public AppUser(Long id, String userName, String password, String email) {
         this.id = id;
         this.userName = userName;
         this.password = password;

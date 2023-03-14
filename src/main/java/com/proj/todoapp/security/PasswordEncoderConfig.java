@@ -1,4 +1,4 @@
-package com.proj.todoapp.config;
+package com.proj.todoapp.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class PasswordEncoderConfig {
 
     @Bean
-    public PasswordEncoder encoder() {
+    public PasswordEncoder globalPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

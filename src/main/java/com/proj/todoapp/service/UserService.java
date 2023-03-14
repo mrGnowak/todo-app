@@ -1,12 +1,12 @@
 package com.proj.todoapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.proj.todoapp.config.PasswordEncoderConfig;
-import com.proj.todoapp.model.Users;
+import com.proj.todoapp.model.AppUser;
 import com.proj.todoapp.repository.UsersRepo;
 
 import jakarta.servlet.http.HttpSession;
@@ -18,12 +18,12 @@ public class UserService {
     private UsersRepo usersRepo;
 
     @Autowired
-    private PasswordEncoderConfig passwordEncoder;
+    private PasswordEncoder globalPasswordEncoder;
 
-    public String saveNewUser(Users user) {
+    public String saveNewUser(AppUser user) {
         if (checkUserExistUserName(user)) {
             if (checkUserExistEmail(user)) {
-                String hashPass = passwordEncoder.encoder().encode(user.getPassword());
+                String hashPass = globalPasswordEncoder.encode(user.getPassword());
                 user.setPassword(hashPass);
                 usersRepo.save(user);
                 System.out.println("Created!");
@@ -38,14 +38,14 @@ public class UserService {
         }
     }
 
-    public Boolean checkUserExistEmail(Users user) {
+    public Boolean checkUserExistEmail(AppUser user) {
         if (usersRepo.findByEmail(user.getEmail()) == null) {
             return true;
         }
         return false;
     }
 
-    public Boolean checkUserExistUserName(Users user) {
+    public Boolean checkUserExistUserName(AppUser user) {
         if (usersRepo.findByUserName(user.getUserName()) == null) {
             return true;
         }
@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public boolean checkPasswordMatches(String password, String hashPassword) {
-        boolean isPasswordMatches = passwordEncoder.encoder().matches(password, hashPassword);
+        boolean isPasswordMatches = globalPasswordEncoder.matches(password, hashPassword);
         return isPasswordMatches;
     }
 
@@ -71,7 +71,7 @@ public class UserService {
 
     }
 
-    public Users getUserById(Long userId) {
+    public AppUser getUserById(Long userId) {
         var user = usersRepo.findById(userId);
         return user.isPresent() ? user.get() : null;
     }
@@ -81,7 +81,7 @@ public class UserService {
         session.setAttribute("USER_ID", userId);
     }
 
-    public Users getSessionUser() {
+    public AppUser getSessionUser() {
         var session = getSession();
         var userId = session.getAttribute("USER_ID");
         if (userId == null) {

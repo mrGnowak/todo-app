@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRefreshUser } from '../UserProvider';
 
 type LoginForm = {
-  email: string;
+  userName: string;
   password: string;
 };
 export default function LoginPage() {
@@ -16,7 +16,7 @@ export default function LoginPage() {
       await fetch('api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: values.email, password: values.password }),
+        body: JSON.stringify({ userName: values.userName, password: values.password }),
       });
       navigate('/');
       refreshUser();
@@ -42,7 +42,11 @@ export default function LoginPage() {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
+        <Form.Item
+          label="Username"
+          name="userName"
+          rules={[{ required: true, message: 'Please input your userName!' }]}
+        >
           <Input />
         </Form.Item>
 

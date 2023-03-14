@@ -3,13 +3,12 @@ package com.proj.todoapp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.proj.todoapp.model.Users;
+import com.proj.todoapp.model.AppUser;
 import com.proj.todoapp.service.UserService;
 
 import io.micrometer.common.lang.NonNull;
@@ -25,7 +24,7 @@ public class UserRegController {
     UserService userService;
 
     @PostMapping(value = "/save", consumes = { "*/*" })
-    public String register(@NonNull @NotBlank @RequestBody Users users) {
-        return userService.saveNewUser(users);
+    public void register(@NonNull @NotBlank @RequestBody AppUser users) {
+        userService.saveNewUser(users);
     }
 }
