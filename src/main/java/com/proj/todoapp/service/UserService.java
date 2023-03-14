@@ -75,26 +75,4 @@ public class UserService {
         var user = usersRepo.findById(userId);
         return user.isPresent() ? user.get() : null;
     }
-
-    public void startSession(Long userId) {
-        var session = getSession();
-        session.setAttribute("USER_ID", userId);
-    }
-
-    public Users getSessionUser() {
-        var session = getSession();
-        var userId = session.getAttribute("USER_ID");
-        if (userId == null) {
-            return null;
-        }
-        return getUserById((Long) userId);
-
-    }
-
-    public HttpSession getSession() {
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        var session = attr.getRequest().getSession(true); // true == allow create
-        return session;
-    }
-
 }

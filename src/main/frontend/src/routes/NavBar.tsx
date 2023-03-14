@@ -31,7 +31,20 @@ function NavBar() {
               key: 'signin',
             },
           ]
-        : []),
+        : [
+            {
+              label: (
+                <span>
+                  Hello <b>{user.email}</b>
+                </span>
+              ),
+              key: 'hello_user',
+            },
+            {
+              label: <a href="/logout">Logout</a>,
+              key: 'logout',
+            },
+          ]),
     ],
     [user]
   );

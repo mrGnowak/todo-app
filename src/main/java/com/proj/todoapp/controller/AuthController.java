@@ -1,7 +1,8 @@
 package com.proj.todoapp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,15 +15,24 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.proj.todoapp.model.LoginUser;
+import com.proj.todoapp.dto.LoginUserDto;
+import com.proj.todoapp.dto.UserDto;
+import com.proj.todoapp.model.Users;
 import com.proj.todoapp.security.SecurityUser;
-import com.proj.todoapp.security.UserDto;
+import com.proj.todoapp.service.UserService;
 
+import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.NotBlank;
 
 @RestController
-@RequestMapping(value = "/api")
-public class LoginController {
+@RequestMapping(value = "/api/auth")
+public class AuthController {
+
+    Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     private AuthenticationManager authManager;
@@ -33,8 +43,13 @@ public class LoginController {
         return session;
     }
 
+    @PostMapping(value = "/register", consumes = { "*/*" })
+    public String register(@NonNull @NotBlank @RequestBody Users users) {
+        return userService.saveNewUser(users);
+    }
+
     @PostMapping(value = "/login", consumes = { "*/*" })
-    public Long login(@RequestBody LoginUser loginUser) {
+    public Long login(@RequestBody LoginUserDto loginUser) {
         try {
             var credentials = new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword());
             var authenticate = authManager.authenticate(credentials);
@@ -50,6 +65,12 @@ public class LoginController {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    @PostMapping(value = "/logout")
+    public void logout() {
+        getSession().removeAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+
     }
 
     @GetMapping("/getUser")

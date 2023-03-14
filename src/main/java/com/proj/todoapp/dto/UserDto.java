@@ -1,4 +1,4 @@
-package com.proj.todoapp.security;
+package com.proj.todoapp.dto;
 
 import lombok.Data;
 

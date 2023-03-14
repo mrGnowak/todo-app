@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.proj.todoapp.repository.UsersRepo;
 
-public class SecurityUserDetailsService implements UserDetailsService {
+public class SecurityUserService implements UserDetailsService {
     @Autowired
     private UsersRepo usersRepo;
 
@@ -23,7 +23,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
                 setId(user.getId());
                 setAuthorities(List.of(() -> "read"));
                 setPassword(user.getPassword());
-                setUsername(user.getUserName());
+                setUsername(user.getEmail());
                 setAccountNonExpired(true);
                 setAccountNonLocked(true);
                 setCredentialsNonExpired(true);

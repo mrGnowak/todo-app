@@ -6,6 +6,7 @@ import SignUp from './SignUp';
 import TodoApp from './TodoApp';
 import React from 'react';
 import { useUser } from '../UserProvider';
+import Logout from './Logout';
 
 export default function Routes() {
   const user = useUser();
@@ -36,7 +37,13 @@ export default function Routes() {
               errorElement: <ErrorPage />,
             },
           ]
-        : []),
+        : [
+            {
+              path: '/logout',
+              element: <Logout />,
+              errorElement: <ErrorPage />,
+            },
+          ]),
     ]);
   }, [user]);
 

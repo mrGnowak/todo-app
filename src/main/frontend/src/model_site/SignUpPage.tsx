@@ -19,7 +19,7 @@ export default function SignUpPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userName: values.userName, email: values.email, password: values.password }),
     };
-    fetch('api/register/save', requestOptions)
+    fetch('api/auth/register', requestOptions)
       .then((response) => response.text())
       .then((data) => {
         setResponse(data);

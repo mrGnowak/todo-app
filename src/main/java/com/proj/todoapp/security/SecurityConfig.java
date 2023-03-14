@@ -19,7 +19,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        var service = new SecurityUserDetailsService();
+        var service = new SecurityUserService();
         return service;
     }
 
@@ -46,11 +46,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/todoapp/**").authenticated()
                 .requestMatchers("/todoapp").authenticated()
-                .requestMatchers("/api/getUser").authenticated()
-                .requestMatchers("/api/login/**").permitAll()
+                .requestMatchers("/api/auth/getUser").authenticated()
+                .requestMatchers("/api/auth/logout").authenticated()
+                .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/register").permitAll()
                 .anyRequest().permitAll();
-
-        // .logoutSuccessHandler(logoutSuccessHandler());
 
         return http.build();
     }
