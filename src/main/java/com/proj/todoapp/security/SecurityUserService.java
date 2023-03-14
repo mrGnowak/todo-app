@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.proj.todoapp.repository.UsersRepo;
 
-public class SecurityUserDetailService implements UserDetailsService {
+public class SecurityUserService implements UserDetailsService {
 
     @Autowired
     private UsersRepo usersRepo;

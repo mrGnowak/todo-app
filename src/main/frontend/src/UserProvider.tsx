@@ -33,7 +33,7 @@ export function UserProvider({ children }: React.PropsWithChildren<unknown>) {
   const refresh = React.useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('api/getUser', { method: 'get' });
+      const res = await fetch('api/auth/getUser', { method: 'get' });
       if (!res.ok) {
         throw 'error';
       }

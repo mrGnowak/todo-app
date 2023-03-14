@@ -6,6 +6,8 @@ import SignUp from './SignUp';
 import TodoApp from './TodoApp';
 import React from 'react';
 import { useUser } from '../UserProvider';
+import Logout from './Logout';
+import UnauthorizedPage from './UnauthorizedPage';
 
 export default function Routes() {
   const user = useUser();
@@ -21,7 +23,7 @@ export default function Routes() {
       {
         path: '/todoapp',
         element: <TodoApp />,
-        errorElement: <ErrorPage />,
+        errorElement: <UnauthorizedPage />,
       },
       ...(user == null
         ? [
@@ -39,7 +41,7 @@ export default function Routes() {
         : [
             {
               path: '/logout',
-              element: <SignUp />,
+              element: <Logout />,
               errorElement: <ErrorPage />,
             },
           ]),

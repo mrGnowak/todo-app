@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   const onFinish = async (values: LoginForm) => {
     try {
-      await fetch('api/login', {
+      await fetch('api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userName: values.userName, password: values.password }),
@@ -25,6 +25,7 @@ export default function LoginPage() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };

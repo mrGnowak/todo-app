@@ -1,8 +1,9 @@
+import { Button, Result } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import { useRouteError } from 'react-router-dom';
 import NavBar from './NavBar';
 
-export default function ErrorPage() {
+export default function UnauthorizedPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const error = useRouteError() as any;
   console.error(error);
@@ -14,13 +15,16 @@ export default function ErrorPage() {
       </Header>
 
       <Content style={{ padding: '0 50px' }}>
-        <div id="error-page">
-          <h1>Oops!</h1>
-          <p>Sorry, an unexpected error has occurred.</p>
-          <p>
-            <i>{error.statusText || error.message}</i>
-          </p>
-        </div>
+        <Result
+          status="403"
+          title="403"
+          subTitle="Sorry, you are not authorized to access this page."
+          extra={
+            <Button type="primary" href={'/login'}>
+              Log in
+            </Button>
+          }
+        />
       </Content>
     </>
   );

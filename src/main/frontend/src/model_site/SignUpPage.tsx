@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Checkbox, Form, Input, notification } from 'antd';
+import { useState } from 'react';
+import { Button, Checkbox, Form, Input } from 'antd';
 import Title from 'antd/es/typography/Title';
-import { NotificationPlacement } from 'antd/es/notification/interface';
 
 type SignInForm = {
   userName: string;
@@ -10,7 +9,6 @@ type SignInForm = {
 };
 
 export default function SignUpPage() {
-  //const [api, contextHolder] = notification.useNotification();
   const [response, setResponse] = useState<string | undefined>();
 
   const save = (values: SignInForm) => {
@@ -19,26 +17,19 @@ export default function SignUpPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userName: values.userName, email: values.email, password: values.password }),
     };
-    fetch('api/register/save', requestOptions)
+    fetch('api/auth/register', requestOptions)
       .then((response) => response.text())
       .then((data) => {
         setResponse(data);
       });
-    //.then(() => openNotification('topLeft', response));
   };
 
-  //const openNotification = (placement: NotificationPlacement, newResponse: string | undefined) => {
-  //  api.info({
-  //    message: 'Notification',
-  //    description: newResponse,
-  //    placement,
-  //  });
-  //};
   const onFinish = (values: SignInForm) => {
     console.log('Success:', values);
     save(values);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };

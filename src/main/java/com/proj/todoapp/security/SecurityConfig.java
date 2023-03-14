@@ -27,7 +27,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        var service = new SecurityUserDetailService();
+        var service = new SecurityUserService();
         return service;
     }
 

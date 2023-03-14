@@ -33,6 +33,14 @@ function NavBar() {
           ]
         : [
             {
+              label: (
+                <span>
+                  Hello <b>{user.userName}</b>
+                </span>
+              ),
+              key: 'hello_user',
+            },
+            {
               label: <a href="/logout">Logout</a>,
               key: 'logout',
             },
