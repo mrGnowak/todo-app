@@ -33,14 +33,14 @@ public class TodoController {
     @Autowired
     private TodoRepo todoRepo;
 
-    @GetMapping(value = "/get")
-    public List<TodoItem> getAll() {
-        return todoRepo.findAll();
+    @GetMapping(value = "/get/{userId}")
+    public List<TodoItem> getAllForUser(@PathVariable Long userId) {
+        return todoRepo.findAllByUserId(userId);
     }
 
-    @GetMapping(value = "/get/{colName}")
-    public List<TodoItem> findForCols(@PathVariable String colName) {
-        return linkedList.createArray(colName);
+    @GetMapping(value = "/get/{colName}/{userId}")
+    public List<TodoItem> findForCols(@PathVariable String colName, @PathVariable Long userId) {
+        return linkedList.createArray(colName, userId);
     }
 
     @PostMapping(value = "/save", consumes = { "*/*" })
@@ -53,14 +53,14 @@ public class TodoController {
         return todoRepo.save(todoItem);
     }
 
-    @GetMapping(value = "/get/{srcId}/{dstId}/{dstColName}", consumes = { "*/*" })
-    public String updateDroppable(@PathVariable Long srcId, @PathVariable Long dstId, @PathVariable String dstColName) {
-        linkedList.updateDroppable(srcId, dstId, dstColName);
-        return "end";
+    @GetMapping(value = "/get/{srcId}/{dstId}/{dstColName}/{userId}", consumes = { "*/*" })
+    public void updateDroppable(@PathVariable Long srcId, @PathVariable Long dstId, @PathVariable String dstColName,
+            @PathVariable Long userId) {
+        linkedList.updateDroppable(srcId, dstId, dstColName, userId);
     }
 
-    @DeleteMapping(value = "/remove/{id}")
-    public void remove(@PathVariable Long id) {
-        linkedList.deleteItem(id);
+    @DeleteMapping(value = "/remove/{id}/{userId}")
+    public void remove(@PathVariable Long id, @PathVariable Long userId) {
+        linkedList.deleteItem(id, userId);
     }
 }

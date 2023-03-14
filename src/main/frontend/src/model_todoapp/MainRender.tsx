@@ -5,12 +5,14 @@ import { PlusOutlined } from '@ant-design/icons';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Todo } from './types';
 import Column from './Column';
+import { useUser } from '../UserProvider';
 
 const TODO = 'to-do';
 const DONE = 'done';
 const PROGRESS = 'progress';
 
 export default function MainRender() {
+  const sessionUser = useUser();
   const { Title } = Typography;
   const [todoCol, setTodoCol] = useState<Todo[]>([]);
   const [progressCol, setProgressCol] = useState<Todo[]>([]);
@@ -23,17 +25,17 @@ export default function MainRender() {
   const refresh = React.useCallback(() => {
     if (isLoading) return;
     setIsLoading(true);
-    fetch('api/todoapp/get/' + TODO)
+    fetch('api/todoapp/get/' + TODO + '/' + sessionUser?.id)
       .then((response) => response.json())
       .then((data) => {
         setTodoCol(data as Todo[]);
       });
-    fetch('api/todoapp/get/' + PROGRESS)
+    fetch('api/todoapp/get/' + PROGRESS + '/' + sessionUser?.id)
       .then((response) => response.json())
       .then((data) => {
         setProgressCol(data as Todo[]);
       });
-    fetch('api/todoapp/get/' + DONE)
+    fetch('api/todoapp/get/' + DONE + '/' + sessionUser?.id)
       .then((response) => response.json())
       .then((data) => {
         setDoneCol(data as Todo[]);
@@ -46,9 +48,9 @@ export default function MainRender() {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     };
-    fetch('api/todoapp/get/' + srcId + '/' + dstId + '/' + dstColname, requestOptions)
-      .then((response) => response.json())
-      .finally(() => refresh());
+    fetch('api/todoapp/get/' + srcId + '/' + dstId + '/' + dstColname + '/' + sessionUser?.id, requestOptions).finally(
+      () => refresh()
+    );
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -97,7 +99,12 @@ export default function MainRender() {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: todoItem, columnName: TODO, nextId: todoCol[0]?.id ?? -1 }),
+        body: JSON.stringify({
+          title: todoItem,
+          columnName: TODO,
+          nextId: todoCol[0]?.id ?? -1,
+          userId: sessionUser?.id,
+        }),
       };
       fetch('api/todoapp/save', requestOptions)
         .then((response) => response.json())

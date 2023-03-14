@@ -23,6 +23,7 @@ export default function Routes() {
       {
         path: '/todoapp',
         element: <TodoApp />,
+
         errorElement: <UnauthorizedPage />,
       },
       ...(user == null
