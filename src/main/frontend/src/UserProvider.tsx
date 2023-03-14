@@ -35,8 +35,11 @@ export function UserProvider({ children }: React.PropsWithChildren<unknown>) {
     setIsLoading(true);
     try {
       const res = await fetch('api/getUser', { method: 'get' });
+      if (!res.ok) {
+        throw 'error';
+      }
       setUser(await res.json());
-    } catch {
+    } catch (e) {
       setUser(undefined);
     } finally {
       setIsLoading(false);
