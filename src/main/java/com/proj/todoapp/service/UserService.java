@@ -71,4 +71,12 @@ public class UserService {
         return user.isPresent() ? user.get() : null;
     }
 
+    public void updateUser(AppUser appUser) {
+        var id = appUser.getId();
+        var newUser = usersRepo.findById(id).get();
+        newUser.setPassword(globalPasswordEncoder.encode(appUser.getPassword()));
+        usersRepo.save(newUser);
+
+    }
+
 }

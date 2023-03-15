@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+import { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useUser } from '../UserProvider';
 
@@ -38,11 +38,18 @@ function NavBar() {
                   Hello <b>{user.userName}</b>
                 </span>
               ),
-              key: 'hello_user',
-            },
-            {
-              label: <a href="/logout">Logout</a>,
-              key: 'logout',
+              key: 'user_options',
+              icon: <SettingOutlined />,
+              children: [
+                {
+                  label: <a href="/changepassword">Change password</a>,
+                  key: 'change_pass',
+                },
+                {
+                  label: <a href="/logout">Logout</a>,
+                  key: 'logout',
+                },
+              ],
             },
           ]),
     ],
