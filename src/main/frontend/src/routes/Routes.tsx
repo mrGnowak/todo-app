@@ -8,6 +8,7 @@ import React from 'react';
 import { useUser } from '../UserProvider';
 import Logout from './Logout';
 import UnauthorizedPage from './UnauthorizedPage';
+import ChangePass from './ChangePass';
 
 export default function Routes() {
   const user = useUser();
@@ -43,6 +44,11 @@ export default function Routes() {
             {
               path: '/logout',
               element: <Logout />,
+              errorElement: <ErrorPage />,
+            },
+            {
+              path: '/changepassword',
+              element: <ChangePass />,
               errorElement: <ErrorPage />,
             },
           ]),
