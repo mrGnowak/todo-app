@@ -1,8 +1,18 @@
-import React from 'react';
-import MainRender from '../model/MainRender';
+import { Layout } from 'antd';
+import MainRender from '../model_todoapp/MainRender';
+import NavBar from './NavBar';
 
-function App() {
-  return <MainRender />;
+function TodoApp() {
+  const { Header } = Layout;
+
+  return (
+    <>
+      <Header>
+        <NavBar />
+      </Header>
+      <MainRender />;
+    </>
+  );
 }
 
-export default App;
+export default TodoApp;

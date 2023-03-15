@@ -16,35 +16,35 @@ import com.proj.todoapp.repository.TodoRepo;
 public class LinkedList {
 
     @Autowired
-    TodoRepo todoRepo;
+    private TodoRepo todoRepo;
 
-    public boolean updateDroppable(Long srcId, Long dstId, String dstColName) {
+    public boolean updateDroppable(Long srcId, Long dstId, String dstColName, Long userId) {
         if (dstId.equals(srcId)) {
             return false;
         }
-        popItemFcn(srcId);
-        putItemBefore(srcId, dstId, dstColName);
+        popItemFcn(srcId, userId);
+        putItemBefore(srcId, dstId, dstColName, userId);
         return true;
     }
 
-    public void deleteItem(Long delId) {
-        popItemFcn(delId);
+    public void deleteItem(Long delId, Long userId) {
+        popItemFcn(delId, userId);
         todoRepo.deleteById(delId);
     }
 
-    public void popItemFcn(Long srcId) {
+    public void popItemFcn(Long srcId, Long userId) {
         // ---------POP-------
 
-        var srcPrevItem = todoRepo.findByNextId(srcId);
+        var srcPrevItem = todoRepo.findByNextIdAndUserId(srcId, userId);
         if (srcPrevItem == null) {
             // if there is no exist previous item, that was taken
         } else {
             srcPrevItem.setNextId(todoRepo.findById(srcId).get().getNextId());
-            todoRepo.save(srcPrevItem);
         }
+        todoRepo.flush();
     }
 
-    public void putItemBefore(Long srcId, Long dstId, String dstColName) {
+    public void putItemBefore(Long srcId, Long dstId, String dstColName, Long userId) {
         // -----------PUT----------
 
         try {
@@ -52,25 +52,24 @@ public class LinkedList {
             if (srcItem == null) {
                 return;
             }
-            var prevDstItem = todoRepo.findByNextIdAndColumnName(dstId, dstColName);
+            var prevDstItem = todoRepo.findByNextIdAndColumnNameAndUserId(dstId, dstColName, userId);
             if (prevDstItem != null) {
                 prevDstItem.setNextId(srcId);
-                todoRepo.save(prevDstItem);
             }
             srcItem.setNextId(dstId);
             srcItem.setColumnName(dstColName);
-            todoRepo.save(srcItem);
+            todoRepo.flush();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public List<TodoItem> createArray(String colName) {
+    public List<TodoItem> createArray(String colName, Long userId) {
 
         List<TodoItem> todoItems = new ArrayList<TodoItem>();
         List<TodoItem> newTodoItems = new ArrayList<TodoItem>();
 
-        todoItems = todoRepo.findByColumnName(colName);
+        todoItems = todoRepo.findByColumnNameAndUserId(colName, userId);
 
         Map<Long, Long> dictionary = new HashMap<>();
         for (TodoItem todoItem : todoItems) {

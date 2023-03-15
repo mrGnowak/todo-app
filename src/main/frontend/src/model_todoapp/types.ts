@@ -3,4 +3,5 @@ export type Todo = {
   columnName: string;
   title: string;
   nextId: number;
+  userId: number;
 };

@@ -34,8 +34,8 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testRepoAdd() {
-		var item1 = new TodoItem(1L, "A1", "A", 2L);
-		var item2 = new TodoItem(2L, "A2", "A", -1l);
+		var item1 = new TodoItem(1L, "A1", "A", 2L, 1L);
+		var item2 = new TodoItem(2L, "A2", "A", -1l, 1L);
 
 		todoRepo.save(item1);
 		todoRepo.save(item2);
@@ -47,12 +47,12 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_dragBeginToEnd_TwoElements() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", -1L));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", -1L, 1L));
 
 		// initial condition
 		// 1 -> 2
-		linkedList.updateDroppable(1L, -1L, "A");
+		linkedList.updateDroppable(1L, -1L, "A", 1L);
 		// expected order
 		// 2 -> 1
 
@@ -63,12 +63,12 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_dragEndToBegin_TwoElements() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", -1L));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", -1L, 1L));
 
 		// initial condition
 		// 1 -> 2
-		linkedList.updateDroppable(2L, 1L, "A");
+		linkedList.updateDroppable(2L, 1L, "A", 1L);
 		// expected order
 		// 2 -> 1
 
@@ -79,13 +79,13 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_dragBeginToEnd_ThreeElements() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
-		todoRepo.save(new TodoItem(3L, "A3", "A", -1L));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", 3L, 1L));
+		todoRepo.save(new TodoItem(3L, "A3", "A", -1L, 1L));
 
 		// initial condition
 		// 1 -> 2 -> 3
-		linkedList.updateDroppable(1L, -1L, "A");
+		linkedList.updateDroppable(1L, -1L, "A", 1L);
 		// expected order
 		// 2 -> 3 -> 1
 
@@ -97,13 +97,13 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_dragEndToBegin_ThreeElements() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
-		todoRepo.save(new TodoItem(3L, "A3", "A", -1L));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", 3L, 1L));
+		todoRepo.save(new TodoItem(3L, "A3", "A", -1L, 1L));
 
 		// initial condition
 		// 1 -> 2 -> 3
-		linkedList.updateDroppable(3L, 1L, "A");
+		linkedList.updateDroppable(3L, 1L, "A", 1L);
 		// expected order
 		// 3 -> 1 -> 2
 
@@ -115,16 +115,16 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_swapNeighbours_FrontFirst() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
-		todoRepo.save(new TodoItem(3L, "A3", "A", 4L));
-		todoRepo.save(new TodoItem(4L, "A4", "A", 5l));
-		todoRepo.save(new TodoItem(5L, "A5", "A", -1l));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", 3L, 1L));
+		todoRepo.save(new TodoItem(3L, "A3", "A", 4L, 1L));
+		todoRepo.save(new TodoItem(4L, "A4", "A", 5l, 1L));
+		todoRepo.save(new TodoItem(5L, "A5", "A", -1l, 1L));
 		// todoRepo.flush();
 
 		// initial condition
 		// 1 -> 2 -> 3 -> 4 -> 5
-		linkedList.updateDroppable(2L, 4L, "A");
+		linkedList.updateDroppable(2L, 4L, "A", 1L);
 
 		// expected order
 		// 1 -> 3 -> 2 -> 4 -> 5
@@ -139,15 +139,15 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_swapNeighbours_FrontLast() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
-		todoRepo.save(new TodoItem(3L, "A3", "A", 4L));
-		todoRepo.save(new TodoItem(4L, "A4", "A", 5l));
-		todoRepo.save(new TodoItem(5L, "A5", "A", -1l));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", 3L, 1L));
+		todoRepo.save(new TodoItem(3L, "A3", "A", 4L, 1L));
+		todoRepo.save(new TodoItem(4L, "A4", "A", 5l, 1L));
+		todoRepo.save(new TodoItem(5L, "A5", "A", -1l, 1L));
 
 		// initial condition
 		// 1 -> 2 -> 3 -> 4 -> 5
-		linkedList.updateDroppable(3L, 2L, "A");
+		linkedList.updateDroppable(3L, 2L, "A", 1L);
 
 		// expected order
 		// 1 -> 3 -> 2 -> 4 -> 5
@@ -162,14 +162,14 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_DragToEmpty() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
-		todoRepo.save(new TodoItem(3L, "A3", "A", -1L));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", 3L, 1L));
+		todoRepo.save(new TodoItem(3L, "A3", "A", -1L, 1L));
 
 		// initial condition
 		// A: 1 -> 2 -> 3
 		// B: empty
-		linkedList.updateDroppable(3L, -1L, "B");
+		linkedList.updateDroppable(3L, -1L, "B", 1L);
 
 		// expected order
 		// A: 1 -> 2
@@ -183,15 +183,15 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_DragToSingle_ToEnd() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
-		todoRepo.save(new TodoItem(3L, "A3", "A", -1L));
-		todoRepo.save(new TodoItem(4L, "B1", "B", -1L));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", 3L, 1L));
+		todoRepo.save(new TodoItem(3L, "A3", "A", -1L, 1L));
+		todoRepo.save(new TodoItem(4L, "B1", "B", -1L, 1L));
 
 		// initial condition
 		// A: 1 -> 2 -> 3
 		// B: 4
-		linkedList.updateDroppable(3L, -1L, "B");
+		linkedList.updateDroppable(3L, -1L, "B", 1L);
 
 		// expected order
 		// A: 1 -> 2
@@ -206,15 +206,15 @@ class ToDoAppApplicationTests {
 	@Test
 	@DirtiesContext
 	void testLinkedList_DragToSingle_ToFront() {
-		todoRepo.save(new TodoItem(1L, "A1", "A", 2L));
-		todoRepo.save(new TodoItem(2L, "A2", "A", 3L));
-		todoRepo.save(new TodoItem(3L, "A3", "A", -1L));
-		todoRepo.save(new TodoItem(4L, "B1", "B", -1L));
+		todoRepo.save(new TodoItem(1L, "A1", "A", 2L, 1L));
+		todoRepo.save(new TodoItem(2L, "A2", "A", 3L, 1L));
+		todoRepo.save(new TodoItem(3L, "A3", "A", -1L, 1L));
+		todoRepo.save(new TodoItem(4L, "B1", "B", -1L, 1L));
 
 		// initial condition
 		// A: 1 -> 2 -> 3
 		// B: 4
-		linkedList.updateDroppable(3L, 4L, "B");
+		linkedList.updateDroppable(3L, 4L, "B", 1L);
 
 		// expected order
 		// A: 1 -> 2

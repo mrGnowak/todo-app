@@ -26,7 +26,10 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
           <Col flex="50px">
             <Button
               type="primary"
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setIsModalOpen(true);
+                setEditedTitle(item.title);
+              }}
               style={{ backgroundColor: 'rgb(120, 120, 120)' }}
             >
               <EditOutlined />
@@ -47,6 +50,7 @@ export default function TodoItem({ item, onRemove, onUpdate }: Props) {
                   setIsModalOpen(false);
                   onUpdate(item.id, editedTitle, item.columnName, item.nextId);
                 }}
+                value={editedTitle}
                 onChange={onChange}
               />
             </Modal>

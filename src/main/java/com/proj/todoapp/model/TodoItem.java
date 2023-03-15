@@ -19,15 +19,18 @@ public class TodoItem {
     private String columnName;
     @Column
     private Long nextId;
+    @Column
+    private Long userId;
 
     public TodoItem() {
     }
 
-    public TodoItem(Long id, String title, String columnName, Long nextId) {
+    public TodoItem(Long id, String title, String columnName, Long nextId, Long userId) {
 
         this.id = id;
         this.title = title;
         this.columnName = columnName;
         this.nextId = nextId;
+        this.userId = userId;
     }
 }
