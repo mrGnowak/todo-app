@@ -115,7 +115,7 @@ export default function MainRender() {
 
   const onRemove = useCallback(
     (id: number) => {
-      fetch('api/todoapp/remove/' + id, { method: 'DELETE' }).then(() => refresh());
+      fetch('api/todoapp/remove/' + id + '/' + sessionUser?.id, { method: 'DELETE' }).then(() => refresh());
     },
     [refresh]
   );
