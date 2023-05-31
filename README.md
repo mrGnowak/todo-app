@@ -8,6 +8,8 @@
 cd src/main/frontend
 yarn vite
 ```
+W wersji developerskiej frontend dostępny jest na porcie `5173`.
+
 > W `vite.config.ts` jest zapisany endpoint dla `/api` = `"http://127.0.0.1:8080`
 
 ## Prod
