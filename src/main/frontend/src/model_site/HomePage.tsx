@@ -1,7 +1,10 @@
+import { useUser } from '../UserProvider';
+
 function HomePage() {
+  const sessionUser = useUser();
   return (
     <>
-      <h1>Strona Domowa</h1>
+      <h1>Hello {sessionUser?.userName ?? 'stranger'}!</h1>
     </>
   );
 }
